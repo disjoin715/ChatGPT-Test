@@ -2,6 +2,25 @@ const fs = require("fs");
 const path = require("path");
 const PptxGenJS = require("pptxgenjs");
 
+const SLIDE = { widthIn: 10, heightIn: 5.625 };
+const DESIGN = {
+  widthPx: 1280,
+  heightPx: 720,
+  shellMarginXPx: 28,
+  shellMarginYPx: 24,
+  paddingXPx: 30,
+  paddingYPx: 26,
+  columnGapPx: 18,
+  verticalGapPx: 18,
+  headerHeightPx: 118,
+  askHeightPx: 96,
+  cardPaddingPx: 22,
+  metricGapPx: 10,
+  listGapPx: 52,
+};
+
+const PX_PER_IN = DESIGN.widthPx / SLIDE.widthIn;
+
 const palette = {
   deepNavy: "0F2439",
   midNavy: "17395c",
@@ -13,8 +32,8 @@ const palette = {
 };
 
 const sharedText = {
-  fontFace: "Inter",
-  fontSize: 14,
+  fontFace: "Segoe UI",
+  fontSize: 12,
   color: palette.text,
 };
 
@@ -77,22 +96,107 @@ const scenarios = [
   },
 ];
 
-function addHeader(slide, pptx) {
-  slide.addShape(pptx.ShapeType.rect, {
-    x: 0.2,
-    y: 0.2,
-    w: 9.6,
-    h: 5.2,
-    fill: "eef2f7",
-    line: { color: "eef2f7" },
-    shadow: { type: "outer", opacity: 15, blur: 8, offset: 1, angle: 90 },
-  });
+const clamp = (value, min, max) => {
+  if (!Number.isFinite(value)) return min;
+  if (typeof min === "number") value = Math.max(min, value);
+  if (typeof max === "number") value = Math.min(max, value);
+  return value;
+};
 
+const pxToIn = (px) => Number((clamp(px, 0, 5000) / PX_PER_IN).toFixed(4));
+const pxToPt = (px) => Number(clamp((px * 72) / 96, 8, 64).toFixed(2));
+
+const asBox = (xPx, yPx, wPx, hPx) => ({
+  x: pxToIn(xPx),
+  y: pxToIn(yPx),
+  w: pxToIn(Math.max(wPx, 4)),
+  h: pxToIn(Math.max(hPx, 4)),
+});
+
+const computeLayout = () => {
+  const shell = {
+    xPx: DESIGN.shellMarginXPx,
+    yPx: DESIGN.shellMarginYPx,
+    wPx: DESIGN.widthPx - DESIGN.shellMarginXPx * 2,
+    hPx: DESIGN.heightPx - DESIGN.shellMarginYPx * 2,
+    radius: 22,
+  };
+
+  const content = {
+    xPx: shell.xPx + DESIGN.paddingXPx,
+    yPx: shell.yPx + DESIGN.paddingYPx,
+    wPx: shell.wPx - DESIGN.paddingXPx * 2,
+    hPx: shell.hPx - DESIGN.paddingYPx * 2,
+  };
+
+  const cardsHeightPx =
+    content.hPx - DESIGN.headerHeightPx - DESIGN.askHeightPx - DESIGN.verticalGapPx * 2;
+
+  const leftWidthPx =
+    (content.wPx - DESIGN.columnGapPx) * (1.1 / (1.1 + 0.9));
+  const rightWidthPx =
+    (content.wPx - DESIGN.columnGapPx) * (0.9 / (1.1 + 0.9));
+
+  return {
+    shell,
+    content,
+    header: {
+      eyebrowBox: {
+        ...asBox(content.xPx, content.yPx, content.wPx * 0.7, 24),
+      },
+      titleBox: {
+        ...asBox(content.xPx, content.yPx + 26, content.wPx * 0.72, 44),
+      },
+      subtitleBox: {
+        ...asBox(content.xPx, content.yPx + 70, content.wPx * 0.7, 28),
+      },
+      badge: {
+        ...asBox(
+          content.xPx + content.wPx - 220,
+          content.yPx + 6,
+          220,
+          52
+        ),
+        radius: 12,
+      },
+    },
+    cards: {
+      yPx: content.yPx + DESIGN.headerHeightPx + DESIGN.verticalGapPx,
+      heightPx: cardsHeightPx,
+      leftWidthPx,
+      rightWidthPx,
+    },
+    ask: {
+      xPx: content.xPx,
+      yPx:
+        content.yPx +
+        DESIGN.headerHeightPx +
+        DESIGN.verticalGapPx +
+        cardsHeightPx +
+        DESIGN.verticalGapPx,
+      wPx: content.wPx,
+      hPx: DESIGN.askHeightPx,
+    },
+  };
+};
+
+const addShell = (slide, layout, pptx) => {
+  slide.background = { color: palette.deepNavy };
+
+  slide.addShape(pptx.ShapeType.roundRect, {
+    ...asBox(layout.shell.xPx, layout.shell.yPx, layout.shell.wPx, layout.shell.hPx),
+    fill: "f6f9fe",
+    line: { color: "dce3ed" },
+    rectRadius: layout.shell.radius,
+    shadow: { type: "outer", opacity: 25, blur: 9, offset: 0.2, angle: 90 },
+  });
+};
+
+const addHeader = (slide, pptx, layout) => {
   slide.addText("18-Month Outlook · Resource Strategy", {
     ...sharedText,
-    x: 0.6,
-    y: 0.45,
-    fontSize: 12,
+    ...layout.header.eyebrowBox,
+    fontSize: pxToPt(14),
     color: palette.muted,
     bold: true,
     charSpacing: 120,
@@ -100,9 +204,8 @@ function addHeader(slide, pptx) {
 
   slide.addText("Baseline vs. Accelerated Delivery", {
     ...sharedText,
-    x: 0.6,
-    y: 0.75,
-    fontSize: 28,
+    ...layout.header.titleBox,
+    fontSize: pxToPt(32),
     color: palette.deepNavy,
     bold: true,
   });
@@ -111,61 +214,61 @@ function addHeader(slide, pptx) {
     "How resourcing choices shape delivery outcomes and policy readiness.",
     {
       ...sharedText,
-      x: 0.6,
-      y: 1.15,
-      fontSize: 14,
+      ...layout.header.subtitleBox,
+      fontSize: pxToPt(16),
       color: palette.muted,
     }
   );
 
   slide.addShape(pptx.ShapeType.roundRect, {
-    x: 7.6,
-    y: 0.5,
-    w: 2.3,
-    h: 0.65,
+    ...layout.header.badge,
     fill: palette.deepNavy,
     line: { color: palette.deepNavy },
-    shadow: { type: "outer", opacity: 35, blur: 6, offset: 1.1, angle: 90 },
-    rectRadius: 10,
+    rectRadius: 12,
+    shadow: { type: "outer", opacity: 32, blur: 7, offset: 0.18, angle: 90 },
   });
 
   slide.addShape(pptx.ShapeType.ellipse, {
-    x: 7.75,
-    y: 0.62,
-    w: 0.25,
-    h: 0.25,
+    x: layout.header.badge.x + pxToIn(12),
+    y: layout.header.badge.y + pxToIn(15),
+    w: pxToIn(12),
+    h: pxToIn(12),
     fill: palette.gold,
     line: { color: palette.gold },
+    shadow: { type: "outer", opacity: 30, blur: 6, offset: 0.05, angle: 90 },
   });
 
   slide.addText("Q4 FY24 → Q1 FY26", {
     ...sharedText,
-    x: 8.05,
-    y: 0.62,
-    fontSize: 14,
+    x: layout.header.badge.x + pxToIn(30),
+    y: layout.header.badge.y + pxToIn(14),
+    w: layout.header.badge.w - pxToIn(40),
+    h: pxToIn(26),
+    fontSize: pxToPt(14),
     color: "FFFFFF",
     bold: true,
   });
-}
+};
 
-function addMetrics(slide, pptx, x, y, metrics, columnWidth) {
+const addMetrics = (slide, pptx, xPx, yPx, widthPx, metrics) => {
+  const metricGapPx = DESIGN.metricGapPx;
+  const metricHeightPx = 96;
+  const metricWidthPx =
+    (widthPx - metricGapPx * 2) / 3;
+
   metrics.forEach((metric, idx) => {
-    const metricX = x + idx * (columnWidth + 0.12);
+    const metricX = xPx + idx * (metricWidthPx + metricGapPx);
     slide.addShape(pptx.ShapeType.roundRect, {
-      x: metricX,
-      y,
-      w: columnWidth,
-      h: 0.9,
+      ...asBox(metricX, yPx, metricWidthPx, metricHeightPx),
       fill: palette.softGray,
       line: { color: "e1e7ee" },
-      rectRadius: 10,
+      rectRadius: 12,
     });
 
     slide.addText(metric.label.toUpperCase(), {
       ...sharedText,
-      x: metricX + 0.15,
-      y: y + 0.12,
-      fontSize: 10,
+      ...asBox(metricX + 12, yPx + 12, metricWidthPx - 24, 18),
+      fontSize: pxToPt(12),
       color: palette.muted,
       bold: true,
       charSpacing: 40,
@@ -173,80 +276,72 @@ function addMetrics(slide, pptx, x, y, metrics, columnWidth) {
 
     slide.addText(metric.value, {
       ...sharedText,
-      x: metricX + 0.15,
-      y: y + 0.42,
-      fontSize: 18,
+      ...asBox(metricX + 12, yPx + 38, metricWidthPx - 24, 36),
+      fontSize: pxToPt(20),
       color: palette.deepNavy,
       bold: true,
     });
   });
-}
+};
 
-function addBulletList(slide, pptx, x, startY, bullets) {
-  let currentY = startY;
+const addBulletList = (slide, pptx, xPx, startYPx, availableWidthPx, bullets) => {
+  let currentY = startYPx;
+  const lineHeightPx = 54;
+
   bullets.forEach((item) => {
     slide.addShape(pptx.ShapeType.ellipse, {
-      x: x,
-      y: currentY + 0.05,
-      w: 0.15,
-      h: 0.15,
+      x: pxToIn(xPx),
+      y: pxToIn(currentY + 6),
+      w: pxToIn(10),
+      h: pxToIn(10),
       fill: palette.gold,
       line: { color: palette.gold },
-      shadow: { type: "outer", opacity: 25, blur: 4, offset: 0.08, angle: 90 },
+      shadow: { type: "outer", opacity: 26, blur: 5, offset: 0.06, angle: 90 },
     });
 
     slide.addText(item.title, {
       ...sharedText,
-      x: x + 0.25,
-      y: currentY,
-      fontSize: 15,
+      ...asBox(xPx + 18, currentY, availableWidthPx - 18, 22),
+      fontSize: pxToPt(15),
       color: palette.deepNavy,
       bold: true,
     });
 
     slide.addText(item.detail, {
       ...sharedText,
-      x: x + 0.25,
-      y: currentY + 0.26,
-      w: 3.8,
-      fontSize: 12,
+      ...asBox(xPx + 18, currentY + 18, availableWidthPx - 18, 40),
+      fontSize: pxToPt(13),
       color: palette.muted,
     });
 
-    currentY += 0.7;
+    currentY += lineHeightPx;
   });
-}
+};
 
-function addScenarioCard(slide, pptx, x, scenario) {
-  const y = 1.6;
-  const cardWidth = 4.6;
-  const cardHeight = 3.35;
+const addScenarioCard = (slide, pptx, xPx, cardWidthPx, scenario, layout) => {
+  const yPx = layout.cards.yPx;
 
   slide.addShape(pptx.ShapeType.roundRect, {
-    x,
-    y,
-    w: cardWidth,
-    h: cardHeight,
+    ...asBox(xPx, yPx, cardWidthPx, layout.cards.heightPx),
     fill: "FFFFFF",
     line: { color: "dde5ef" },
-    rectRadius: 12,
-    shadow: { type: "outer", opacity: 18, blur: 7, offset: 0.8, angle: 90 },
+    rectRadius: 14,
+    shadow: { type: "outer", opacity: 16, blur: 7, offset: 0.14, angle: 90 },
   });
+
+  const paddingPx = DESIGN.cardPaddingPx;
+  const textWidthPx = cardWidthPx - paddingPx * 2;
 
   slide.addText(scenario.title, {
     ...sharedText,
-    x: x + 0.3,
-    y: y + 0.25,
-    fontSize: 18,
+    ...asBox(xPx + paddingPx, yPx + paddingPx, textWidthPx, 26),
+    fontSize: pxToPt(18),
     color: palette.deepNavy,
     bold: true,
   });
 
   slide.addShape(pptx.ShapeType.roundRect, {
-    x: x + 0.3,
-    y: y + 0.7,
-    w: 3.5,
-    h: 0.55,
+    ...asBox(xPx + paddingPx, yPx + paddingPx + 30, 220, 34),
     fill: scenario.pillFill,
     line: { color: scenario.pillFill },
     rectRadius: 20,
@@ -254,60 +349,54 @@ function addScenarioCard(slide, pptx, x, scenario) {
 
   slide.addText(scenario.pill, {
     ...sharedText,
-    x: x + 0.45,
-    y: y + 0.77,
-    fontSize: 12,
+    ...asBox(xPx + paddingPx + 12, yPx + paddingPx + 34, 200, 24),
+    fontSize: pxToPt(12),
     color: scenario.pillColor,
     bold: true,
   });
 
-  const metricsX = x + 0.3;
-  const metricsY = y + 1.05;
-  const metricWidth = 1.25;
-  addMetrics(slide, pptx, metricsX, metricsY, scenario.metrics, metricWidth);
+  const metricsY = yPx + paddingPx + 68;
+  addMetrics(slide, pptx, xPx + paddingPx, metricsY, textWidthPx, scenario.metrics);
 
-  addBulletList(slide, pptx, x + 0.35, y + 2.0, scenario.bullets);
-}
+  const listStartY = metricsY + 112;
+  addBulletList(
+    slide,
+    pptx,
+    xPx + paddingPx,
+    listStartY,
+    textWidthPx,
+    scenario.bullets
+  );
+};
 
-function addAsk(slide, pptx) {
+const addAsk = (slide, pptx, askLayout) => {
   slide.addShape(pptx.ShapeType.roundRect, {
-    x: 0.55,
-    y: 5.05,
-    w: 8.9,
-    h: 0.85,
-    fill: {
-      type: "solid",
-      color: palette.deepNavy,
-    },
+    ...asBox(askLayout.xPx, askLayout.yPx, askLayout.wPx, askLayout.hPx),
+    fill: palette.deepNavy,
     line: { color: palette.deepNavy },
-    rectRadius: 12,
-    shadow: { type: "outer", opacity: 20, blur: 6, offset: 0.6, angle: 90 },
+    rectRadius: 14,
+    shadow: { type: "outer", opacity: 22, blur: 7, offset: 0.16, angle: 90 },
   });
 
   slide.addShape(pptx.ShapeType.roundRect, {
-    x: 0.7,
-    y: 5.18,
-    w: 0.6,
-    h: 0.6,
-    fill: { color: "FFFFFF", transparency: 70 },
-    line: { color: "FFFFFF", transparency: 70 },
+    ...asBox(askLayout.xPx + 16, askLayout.yPx + 14, 48, 48),
+    fill: { color: "FFFFFF", transparency: 78 },
+    line: { color: "FFFFFF", transparency: 78 },
     rectRadius: 12,
   });
 
   slide.addText("★", {
     ...sharedText,
-    x: 0.85,
-    y: 5.28,
-    fontSize: 24,
+    ...asBox(askLayout.xPx + 30, askLayout.yPx + 20, 18, 28),
+    fontSize: pxToPt(24),
     color: "FFFFFF",
     bold: true,
   });
 
   slide.addText("Our ask: Approve +3 FTE for 18 months", {
     ...sharedText,
-    x: 1.45,
-    y: 5.12,
-    fontSize: 16,
+    ...asBox(askLayout.xPx + 76, askLayout.yPx + 12, askLayout.wPx * 0.6, 28),
+    fontSize: pxToPt(16),
     color: "FFFFFF",
     bold: true,
   });
@@ -316,60 +405,75 @@ function addAsk(slide, pptx) {
     "Enables four concurrent tracks, accelerates policy pilots, and reduces operational risk while safeguarding BAU.",
     {
       ...sharedText,
-      x: 1.45,
-      y: 5.36,
-      w: 5.6,
-      fontSize: 12,
+      ...asBox(askLayout.xPx + 76, askLayout.yPx + 36, askLayout.wPx * 0.6, 28),
+      fontSize: pxToPt(13),
       color: "d5e2f2",
     }
   );
 
   slide.addShape(pptx.ShapeType.roundRect, {
-    x: 7.4,
-    y: 5.17,
-    w: 1.8,
-    h: 0.56,
+    ...asBox(askLayout.xPx + askLayout.wPx - 210, askLayout.yPx + 16, 194, 46),
     fill: palette.gold,
     line: { color: palette.gold },
-    rectRadius: 10,
-    shadow: { type: "outer", opacity: 35, blur: 6, offset: 1, angle: 90 },
+    rectRadius: 12,
+    shadow: { type: "outer", opacity: 32, blur: 7, offset: 0.2, angle: 90 },
   });
 
   slide.addText("Proceed with Preferred Plan", {
     ...sharedText,
-    x: 7.53,
-    y: 5.29,
-    fontSize: 12,
+    ...asBox(askLayout.xPx + askLayout.wPx - 190, askLayout.yPx + 22, 160, 28),
+    fontSize: pxToPt(12),
     color: "1f1606",
     bold: true,
   });
-}
+};
 
-function buildSlide(pptx) {
+const buildSlide = (pptx) => {
   const slide = pptx.addSlide();
-  slide.background = { color: "ffffff" };
+  const layout = computeLayout();
 
-  addHeader(slide, pptx);
-  addScenarioCard(slide, pptx, 0.6, scenarios[0]);
-  addScenarioCard(slide, pptx, 5.0, scenarios[1]);
-  addAsk(slide, pptx);
-}
+  addShell(slide, layout, pptx);
+  addHeader(slide, pptx, layout);
+  addScenarioCard(
+    slide,
+    pptx,
+    layout.content.xPx,
+    layout.cards.leftWidthPx,
+    scenarios[0],
+    layout
+  );
+  addScenarioCard(
+    slide,
+    pptx,
+    layout.content.xPx + layout.cards.leftWidthPx + DESIGN.columnGapPx,
+    layout.cards.rightWidthPx,
+    scenarios[1],
+    layout
+  );
+  addAsk(slide, pptx, layout.ask);
+};
 
-async function main() {
+const createDeck = () => {
   const pptx = new PptxGenJS();
   pptx.layout = "LAYOUT_16x9";
-
   buildSlide(pptx);
+  return pptx;
+};
 
-  const outputDir = path.join(__dirname, "..", "dist");
-  const outputPath = path.join(outputDir, "deck.pptx");
-  fs.mkdirSync(outputDir, { recursive: true });
-
+async function buildSlides(outputPath = path.join(__dirname, "..", "dist", "deck.pptx")) {
+  const pptx = createDeck();
+  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   await pptx.writeFile({ fileName: outputPath });
-  console.log(`Presentation created: ${outputPath}`);
+  return outputPath;
 }
 
-main().catch((err) => {
-  console.error("Failed to build slides:", err);
-  process.exit(1);
-});
+if (require.main === module) {
+  buildSlides()
+    .then((output) => console.log(`Presentation created: ${output}`))
+    .catch((err) => {
+      console.error("Failed to build slides:", err);
+      process.exit(1);
+    });
+}
+
+module.exports = { buildSlides, createDeck };

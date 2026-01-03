@@ -24,6 +24,9 @@ jobs:
       - name: Build slides
         run: npm run build:slides
 
+      - name: List generated artifacts
+        run: ls -R dist
+
       - name: Upload PPTX artifact
         uses: actions/upload-artifact@v4
         with:
