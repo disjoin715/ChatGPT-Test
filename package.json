@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:slides": "node scripts/build-slides.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
