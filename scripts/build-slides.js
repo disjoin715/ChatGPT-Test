@@ -463,7 +463,8 @@ const createDeck = () => {
 async function buildSlides(outputPath = path.join(__dirname, "..", "dist", "deck.pptx")) {
   const pptx = createDeck();
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  await pptx.writeFile({ fileName: outputPath });
+  const nodeBuffer = await pptx.write("nodebuffer");
+  fs.writeFileSync(outputPath, nodeBuffer);
   return outputPath;
 }
 
