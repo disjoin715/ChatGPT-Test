@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const PptxGenJS = require("pptxgenjs");
+const JSZip = require("jszip");
 
 const SLIDE = { widthIn: 10, heightIn: 5.625 };
 const DESIGN = {
@@ -460,11 +461,42 @@ const createDeck = () => {
   return pptx;
 };
 
+const normalizeGroupExtents = (xml, cx, cy) => {
+  const replacements = [
+    { pattern: /<a:ext\s+cx="0"\s+cy="0"\s*\/>/g, value: `<a:ext cx="${cx}" cy="${cy}"/>` },
+    { pattern: /<a:chExt\s+cx="0"\s+cy="0"\s*\/>/g, value: `<a:chExt cx="${cx}" cy="${cy}"/>` },
+  ];
+
+  return replacements.reduce((current, { pattern, value }) => current.replace(pattern, value), xml);
+};
+
+const writeNormalizedPptx = async (pptx, outputPath) => {
+  const nodeBuffer = await pptx.write("nodebuffer");
+  const zip = await JSZip.loadAsync(nodeBuffer);
+
+  const slideCx = Math.round(SLIDE.widthIn * 914400);
+  const slideCy = Math.round(SLIDE.heightIn * 914400);
+
+  const targets = Object.keys(zip.files).filter((name) =>
+    /^ppt\/(slides|slideLayouts)\/.*\.xml$/.test(name)
+  );
+
+  for (const name of targets) {
+    const originalXml = await zip.file(name).async("string");
+    const normalizedXml = normalizeGroupExtents(originalXml, slideCx, slideCy);
+    if (normalizedXml !== originalXml) {
+      zip.file(name, normalizedXml);
+    }
+  }
+
+  const normalizedBuffer = await zip.generateAsync({ type: "nodebuffer" });
+  fs.writeFileSync(outputPath, normalizedBuffer);
+};
+
 async function buildSlides(outputPath = path.join(__dirname, "..", "dist", "deck.pptx")) {
   const pptx = createDeck();
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  const nodeBuffer = await pptx.write("nodebuffer");
-  fs.writeFileSync(outputPath, nodeBuffer);
+  await writeNormalizedPptx(pptx, outputPath);
   return outputPath;
 }
 
