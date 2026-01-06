@@ -477,8 +477,8 @@ const writeNormalizedPptx = async (pptx, outputPath) => {
   const slideCx = Math.round(SLIDE.widthIn * 914400);
   const slideCy = Math.round(SLIDE.heightIn * 914400);
 
-  const targets = Object.keys(zip.files).filter((name) =>
-    /^ppt\/(slides|slideLayouts)\/.*\.xml$/.test(name)
+  const targets = Object.keys(zip.files).filter(
+    (name) => name.startsWith("ppt/") && name.endsWith(".xml")
   );
 
   for (const name of targets) {
