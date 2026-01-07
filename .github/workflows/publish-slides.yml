@@ -1,0 +1,94 @@
+name: Publish Slides (commit PPTX to artifacts branch)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "scripts/**"
+      - "slides/**"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/publish-slides.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-slides
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source (main)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build slides
+        run: npm run build:slides
+
+      - name: Verify output exists
+        run: test -f artifacts/slides/latest.pptx
+
+      - name: Stash PPTX to temp
+        run: |
+          mkdir -p /tmp/publish-slides
+          cp -f artifacts/slides/latest.pptx /tmp/publish-slides/latest.pptx
+
+      - name: Switch to artifacts branch (create if missing)
+        run: |
+          set -e
+          git fetch origin artifacts || true
+          if git show-ref --verify --quiet refs/remotes/origin/artifacts; then
+            git checkout artifacts
+            git reset --hard origin/artifacts
+          else
+            git checkout --orphan artifacts
+          fi
+
+      - name: Replace branch contents with published artifacts
+        run: |
+          set -e
+          find . -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -rf {} +
+
+          mkdir -p slides
+          cp -f /tmp/publish-slides/latest.pptx slides/latest.pptx
+
+          cat > README.md <<'EOF'
+          # Artifacts branch
+
+          This branch is auto-updated by GitHub Actions.
+          - slides/latest.pptx is the latest generated deck
+          EOF
+
+      - name: Commit if changed
+        run: |
+          set -e
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update slides artifact"
+
+      - name: Push artifacts branch
+        run: |
+          set -e
+          git push origin artifacts
