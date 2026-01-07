@@ -9,15 +9,14 @@ const DESIGN = {
   heightPx: 720,
   shellMarginXPx: 28,
   shellMarginYPx: 24,
-  paddingXPx: 30,
-  paddingYPx: 26,
-  columnGapPx: 18,
-  verticalGapPx: 18,
-  headerHeightPx: 118,
-  askHeightPx: 96,
-  cardPaddingPx: 22,
-  metricGapPx: 10,
-  listGapPx: 52,
+  paddingXPx: 44,
+  paddingYPx: 40,
+  columnGapPx: 20,
+  verticalGapPx: 26,
+  headerHeightPx: 100,
+  askHeightPx: 76,
+  cardPaddingPx: 24,
+  metricGapPx: 12,
 };
 
 const PX_PER_IN = DESIGN.widthPx / SLIDE.widthIn;
@@ -30,6 +29,11 @@ const palette = {
   softGray: "f4f6f8",
   text: "0c1b2a",
   muted: "4a5c70",
+  white: "FFFFFF",
+  cardBg: "FFFFFF",
+  shellBg: "f6f9fe",
+  pillBg: "fdf6e8",
+  pillColor: "6f5316",
 };
 
 const sharedText = {
@@ -38,62 +42,88 @@ const sharedText = {
   color: palette.text,
 };
 
-const scenarios = [
+// Slide content from index.html
+const slidesData = [
   {
-    title: "Baseline Resourcing",
-    pill: "4 FTE · BAU + Incremental Change",
-    pillFill: "f2f6fb",
-    pillColor: palette.midNavy,
-    metrics: [
-      { label: "Capacity", value: "~60%" },
-      { label: "Change bandwidth", value: "2 tracks" },
-      { label: "Risk posture", value: "Moderate" },
-    ],
-    bullets: [
-      {
-        title: "Maintain core operations",
-        detail:
-          "Focus on stability and regulatory reporting; limited innovation bandwidth.",
-      },
-      {
-        title: "Sequential delivery",
-        detail:
-          "Two initiative tracks in sequence; elongates policy pilots and analytics upgrades.",
-      },
-      {
-        title: "Deferred optimization",
-        detail:
-          "Automation and resilience improvements shift beyond the 18-month window.",
-      },
-    ],
+    header: {
+      eyebrow: "Central Bank AI Strategy",
+      title: "From Pilot to Production",
+      subtitle: "Trusted, resilient AI for policy, supervision, and market operations.",
+      badge: "Strategic Priorities 2024–2026",
+    },
+    leftCard: {
+      title: "Priority Use Cases",
+      type: "iconGrid",
+      items: [
+        { icon: "◎", title: "Macro-financial intelligence", detail: "Stress testing · systemic risk · liquidity signals" },
+        { icon: "◆", title: "Supervisory early warning", detail: "Outlier detection · conduct monitoring · alerts" },
+        { icon: "◈", title: "Operational excellence", detail: "Secure copilots · reporting · translation" },
+      ],
+      sparkline: [
+        { value: "Policy", label: "Foresight" },
+        { value: "Supervision", label: "Precision" },
+        { value: "Operations", label: "Resilience" },
+      ],
+    },
+    rightCard: {
+      title: "What Enables Scale",
+      type: "pills",
+      pills: ["Trusted Data", "Model Risk", "Secure MLOps"],
+      items: [
+        { icon: "◍", title: "Golden sources", detail: "Lineage and access aligned with confidentiality." },
+        { icon: "✓", title: "Governance by design", detail: "Validation, explainability, and human oversight." },
+        { icon: "⬡", title: "Production resilience", detail: "Monitoring, drift response, and auditability." },
+      ],
+    },
+    ask: {
+      icon: "✦",
+      title: "Executive Priority",
+      text: "Institutionalise governance and invest in the data backbone to scale AI with confidence.",
+      cta: "Mandate",
+    },
   },
   {
-    title: "More Resource (Preferred)",
-    pill: "+3 FTE · Data, Ops, Delivery",
-    pillFill: "fdf6e8",
-    pillColor: "6f5316",
-    metrics: [
-      { label: "Capacity", value: "~90%" },
-      { label: "Change bandwidth", value: "4 tracks" },
-      { label: "Risk posture", value: "Lower" },
-    ],
-    bullets: [
-      {
-        title: "Parallel delivery",
-        detail:
-          "Run concurrent workstreams (policy pilots, data modernization, resiliency uplift) without sacrificing BAU.",
-      },
-      {
-        title: "Faster regulatory readiness",
-        detail:
-          "Expedite compliance changes and scenario testing with embedded risk & controls support.",
-      },
-      {
-        title: "Data & automation gains",
-        detail:
-          "Deliver prioritized automations, observability, and analytics that reduce manual effort and downtime.",
-      },
-    ],
+    header: {
+      eyebrow: "Lifecycle & Governance",
+      title: "Lifecycle Discipline + Democratized Innovation",
+      subtitle: "A repeatable model for trusted deployment and enterprise adoption.",
+      badge: "Policy-Compliant AI",
+    },
+    leftCard: {
+      title: "End-to-End Lifecycle",
+      type: "journey",
+      journey: [
+        { step: "01", title: "Qualify", label: "Strategic fit" },
+        { step: "02", title: "Validate", label: "Model risk" },
+        { step: "03", title: "Deploy", label: "Secure release" },
+        { step: "04", title: "Monitor", label: "Audit ready" },
+      ],
+      sparkline: [
+        { value: "Governed", label: "By design" },
+        { value: "Secure", label: "Every release" },
+        { value: "Measured", label: "Outcomes" },
+      ],
+    },
+    rightCard: {
+      title: "Democratize Innovation",
+      type: "iconGrid",
+      items: [
+        { icon: "◎", title: "Federated squads", detail: "Domain teams co-create with the AI center of excellence." },
+        { icon: "◆", title: "Shared platforms", detail: "Reusable data products, model libraries, and APIs." },
+        { icon: "◈", title: "Capability uplift", detail: "Executive briefings, analyst academies, certified training." },
+      ],
+      sparkline: [
+        { value: "30%", label: "Faster delivery" },
+        { value: "Enterprise", label: "Adoption" },
+        { value: "Audit", label: "Confidence" },
+      ],
+    },
+    ask: {
+      icon: "◆",
+      title: "Strategic Close",
+      text: "Align governance, talent, and platforms to industrialise AI with public trust.",
+      cta: "Commit",
+    },
   },
 ];
 
@@ -105,12 +135,8 @@ const clamp = (value, min, max) => {
 };
 
 const pxToIn = (px) => Number((clamp(px, 0, 5000) / PX_PER_IN).toFixed(4));
-const pxToPt = (px) => Number(clamp((px * 72) / 96, 8, 64).toFixed(2));
-
-// Convert pixel radius to inches for pptxgenjs rectRadius property
+const pxToPt = (px) => Number(clamp((px * 72) / 96, 6, 72).toFixed(2));
 const pxRadiusToIn = (px) => Number((clamp(px, 0, 200) / PX_PER_IN).toFixed(4));
-
-// Convert opacity percentage (0-100) to decimal (0-1) for pptxgenjs shadow opacity
 const opacityToDecimal = (percent) => clamp(percent, 0, 100) / 100;
 
 const asBox = (xPx, yPx, wPx, hPx) => ({
@@ -120,13 +146,13 @@ const asBox = (xPx, yPx, wPx, hPx) => ({
   h: pxToIn(Math.max(hPx, 4)),
 });
 
-const computeLayout = () => {
+const computeLayout = (split = false) => {
   const shell = {
     xPx: DESIGN.shellMarginXPx,
     yPx: DESIGN.shellMarginYPx,
     wPx: DESIGN.widthPx - DESIGN.shellMarginXPx * 2,
     hPx: DESIGN.heightPx - DESIGN.shellMarginYPx * 2,
-    radius: 22,
+    radius: 26,
   };
 
   const content = {
@@ -139,32 +165,25 @@ const computeLayout = () => {
   const cardsHeightPx =
     content.hPx - DESIGN.headerHeightPx - DESIGN.askHeightPx - DESIGN.verticalGapPx * 2;
 
-  const leftWidthPx =
-    (content.wPx - DESIGN.columnGapPx) * (1.1 / (1.1 + 0.9));
-  const rightWidthPx =
-    (content.wPx - DESIGN.columnGapPx) * (0.9 / (1.1 + 0.9));
+  let leftWidthPx, rightWidthPx;
+  if (split) {
+    leftWidthPx = (content.wPx - DESIGN.columnGapPx) / 2;
+    rightWidthPx = leftWidthPx;
+  } else {
+    leftWidthPx = (content.wPx - DESIGN.columnGapPx) * (1.1 / 2);
+    rightWidthPx = (content.wPx - DESIGN.columnGapPx) * (0.9 / 2);
+  }
 
   return {
     shell,
     content,
     header: {
-      eyebrowBox: {
-        ...asBox(content.xPx, content.yPx, content.wPx * 0.7, 24),
-      },
-      titleBox: {
-        ...asBox(content.xPx, content.yPx + 26, content.wPx * 0.72, 44),
-      },
-      subtitleBox: {
-        ...asBox(content.xPx, content.yPx + 70, content.wPx * 0.7, 28),
-      },
+      eyebrowBox: asBox(content.xPx, content.yPx, content.wPx * 0.72, 20),
+      titleBox: asBox(content.xPx, content.yPx + 22, content.wPx * 0.72, 40),
+      subtitleBox: asBox(content.xPx, content.yPx + 66, content.wPx * 0.72, 24),
       badge: {
-        ...asBox(
-          content.xPx + content.wPx - 220,
-          content.yPx + 6,
-          220,
-          52
-        ),
-        radius: 12,
+        ...asBox(content.xPx + content.wPx - 260, content.yPx + 6, 250, 48),
+        radius: 14,
       },
     },
     cards: {
@@ -175,12 +194,7 @@ const computeLayout = () => {
     },
     ask: {
       xPx: content.xPx,
-      yPx:
-        content.yPx +
-        DESIGN.headerHeightPx +
-        DESIGN.verticalGapPx +
-        cardsHeightPx +
-        DESIGN.verticalGapPx,
+      yPx: content.yPx + DESIGN.headerHeightPx + DESIGN.verticalGapPx + cardsHeightPx + DESIGN.verticalGapPx,
       wPx: content.wPx,
       hPx: DESIGN.askHeightPx,
     },
@@ -190,280 +204,395 @@ const computeLayout = () => {
 const addShell = (slide, layout, pptx) => {
   slide.background = { color: palette.deepNavy };
 
+  // Add gradient overlay effect via a subtle shape
   slide.addShape(pptx.ShapeType.roundRect, {
     ...asBox(layout.shell.xPx, layout.shell.yPx, layout.shell.wPx, layout.shell.hPx),
-    fill: "f6f9fe",
-    line: { color: "dce3ed" },
+    fill: { color: "f9fbff", type: "solid" },
+    line: { color: "dce3ed", width: 1 },
     rectRadius: pxRadiusToIn(layout.shell.radius),
-    shadow: { type: "outer", opacity: opacityToDecimal(25), blur: 9, offset: 0.2, angle: 90 },
+    shadow: { type: "outer", opacity: opacityToDecimal(24), blur: 12, offset: 0.3, angle: 90 },
   });
 };
 
-const addHeader = (slide, pptx, layout) => {
-  slide.addText("18-Month Outlook · Resource Strategy", {
+const addHeader = (slide, pptx, layout, headerData) => {
+  // Eyebrow
+  slide.addText(headerData.eyebrow.toUpperCase(), {
     ...sharedText,
     ...layout.header.eyebrowBox,
-    fontSize: pxToPt(14),
+    fontSize: pxToPt(12),
     color: palette.muted,
     bold: true,
-    charSpacing: 120,
+    charSpacing: 3.2,
   });
 
-  slide.addText("Baseline vs. Accelerated Delivery", {
+  // Title
+  slide.addText(headerData.title, {
     ...sharedText,
     ...layout.header.titleBox,
-    fontSize: pxToPt(32),
+    fontSize: pxToPt(34),
     color: palette.deepNavy,
     bold: true,
   });
 
-  slide.addText(
-    "How resourcing choices shape delivery outcomes and policy readiness.",
-    {
-      ...sharedText,
-      ...layout.header.subtitleBox,
-      fontSize: pxToPt(16),
-      color: palette.muted,
-    }
-  );
+  // Subtitle
+  slide.addText(headerData.subtitle, {
+    ...sharedText,
+    ...layout.header.subtitleBox,
+    fontSize: pxToPt(17),
+    color: palette.muted,
+  });
 
+  // Badge background
   slide.addShape(pptx.ShapeType.roundRect, {
     ...layout.header.badge,
     fill: palette.deepNavy,
     line: { color: palette.deepNavy },
-    rectRadius: pxRadiusToIn(12),
-    shadow: { type: "outer", opacity: opacityToDecimal(32), blur: 7, offset: 0.18, angle: 90 },
+    rectRadius: pxRadiusToIn(14),
+    shadow: { type: "outer", opacity: opacityToDecimal(25), blur: 7, offset: 0.15, angle: 90 },
   });
 
+  // Badge dot
   slide.addShape(pptx.ShapeType.ellipse, {
-    x: layout.header.badge.x + pxToIn(12),
-    y: layout.header.badge.y + pxToIn(15),
+    x: layout.header.badge.x + pxToIn(14),
+    y: layout.header.badge.y + pxToIn(18),
     w: pxToIn(12),
     h: pxToIn(12),
     fill: palette.gold,
     line: { color: palette.gold },
-    shadow: { type: "outer", opacity: opacityToDecimal(30), blur: 6, offset: 0.05, angle: 90 },
+    shadow: { type: "outer", opacity: opacityToDecimal(18), blur: 4, offset: 0.02, angle: 90 },
   });
 
-  slide.addText("Q4 FY24 → Q1 FY26", {
+  // Badge text
+  slide.addText(headerData.badge, {
     ...sharedText,
-    x: layout.header.badge.x + pxToIn(30),
-    y: layout.header.badge.y + pxToIn(14),
-    w: layout.header.badge.w - pxToIn(40),
-    h: pxToIn(26),
+    x: layout.header.badge.x + pxToIn(34),
+    y: layout.header.badge.y + pxToIn(12),
+    w: layout.header.badge.w - pxToIn(44),
+    h: pxToIn(24),
     fontSize: pxToPt(14),
-    color: "FFFFFF",
+    color: palette.white,
     bold: true,
   });
 };
 
-const addMetrics = (slide, pptx, xPx, yPx, widthPx, metrics) => {
-  const metricGapPx = DESIGN.metricGapPx;
-  const metricHeightPx = 96;
-  const metricWidthPx =
-    (widthPx - metricGapPx * 2) / 3;
+const addSparkline = (slide, pptx, xPx, yPx, widthPx, sparklineData) => {
+  const gapPx = DESIGN.metricGapPx;
+  const itemWidthPx = (widthPx - gapPx * 2) / 3;
+  const itemHeightPx = 58;
 
-  metrics.forEach((metric, idx) => {
-    const metricX = xPx + idx * (metricWidthPx + metricGapPx);
+  sparklineData.forEach((item, idx) => {
+    const itemX = xPx + idx * (itemWidthPx + gapPx);
+
     slide.addShape(pptx.ShapeType.roundRect, {
-      ...asBox(metricX, yPx, metricWidthPx, metricHeightPx),
+      ...asBox(itemX, yPx, itemWidthPx, itemHeightPx),
       fill: palette.softGray,
-      line: { color: "e1e7ee" },
-      rectRadius: pxRadiusToIn(12),
+      line: { color: "e1e7ee", width: 1 },
+      rectRadius: pxRadiusToIn(16),
     });
 
-    slide.addText(metric.label.toUpperCase(), {
+    slide.addText(item.value, {
       ...sharedText,
-      ...asBox(metricX + 12, yPx + 12, metricWidthPx - 24, 18),
-      fontSize: pxToPt(12),
-      color: palette.muted,
-      bold: true,
-      charSpacing: 40,
-    });
-
-    slide.addText(metric.value, {
-      ...sharedText,
-      ...asBox(metricX + 12, yPx + 38, metricWidthPx - 24, 36),
+      ...asBox(itemX + 8, yPx + 8, itemWidthPx - 16, 24),
       fontSize: pxToPt(20),
       color: palette.deepNavy,
       bold: true,
+      align: "center",
+    });
+
+    slide.addText(item.label.toUpperCase(), {
+      ...sharedText,
+      ...asBox(itemX + 8, yPx + 34, itemWidthPx - 16, 18),
+      fontSize: pxToPt(12),
+      color: palette.muted,
+      charSpacing: 0.6,
+      align: "center",
     });
   });
 };
 
-const addBulletList = (slide, pptx, xPx, startYPx, availableWidthPx, bullets) => {
-  let currentY = startYPx;
-  const lineHeightPx = 54;
+const addIconGrid = (slide, pptx, xPx, yPx, widthPx, items) => {
+  let currentY = yPx;
+  const lineHeightPx = 68;
+  const iconSize = 54;
 
-  bullets.forEach((item) => {
-    slide.addShape(pptx.ShapeType.ellipse, {
-      x: pxToIn(xPx),
-      y: pxToIn(currentY + 6),
-      w: pxToIn(10),
-      h: pxToIn(10),
-      fill: palette.gold,
-      line: { color: palette.gold },
-      shadow: { type: "outer", opacity: opacityToDecimal(26), blur: 5, offset: 0.06, angle: 90 },
+  items.forEach((item) => {
+    // Icon circle
+    slide.addShape(pptx.ShapeType.roundRect, {
+      ...asBox(xPx, currentY, iconSize, iconSize),
+      fill: { color: palette.midNavy, type: "solid" },
+      line: { color: palette.midNavy },
+      rectRadius: pxRadiusToIn(16),
+      shadow: { type: "outer", opacity: opacityToDecimal(30), blur: 6, offset: 0.1, angle: 90 },
     });
 
+    // Icon text
+    slide.addText(item.icon, {
+      ...sharedText,
+      ...asBox(xPx, currentY + 12, iconSize, 30),
+      fontSize: pxToPt(22),
+      color: palette.white,
+      align: "center",
+    });
+
+    // Title
     slide.addText(item.title, {
       ...sharedText,
-      ...asBox(xPx + 18, currentY, availableWidthPx - 18, 22),
-      fontSize: pxToPt(15),
+      ...asBox(xPx + iconSize + 14, currentY + 4, widthPx - iconSize - 14, 22),
+      fontSize: pxToPt(16),
       color: palette.deepNavy,
       bold: true,
     });
 
+    // Detail
     slide.addText(item.detail, {
       ...sharedText,
-      ...asBox(xPx + 18, currentY + 18, availableWidthPx - 18, 40),
+      ...asBox(xPx + iconSize + 14, currentY + 26, widthPx - iconSize - 14, 38),
       fontSize: pxToPt(13),
       color: palette.muted,
     });
 
     currentY += lineHeightPx;
   });
+
+  return currentY;
 };
 
-const addScenarioCard = (slide, pptx, xPx, cardWidthPx, scenario, layout) => {
-  const yPx = layout.cards.yPx;
+const addPillRow = (slide, pptx, xPx, yPx, widthPx, pills) => {
+  const gapPx = 12;
+  const pillWidthPx = (widthPx - gapPx * 2) / 3;
+  const pillHeightPx = 32;
 
+  pills.forEach((pill, idx) => {
+    const pillX = xPx + idx * (pillWidthPx + gapPx);
+
+    slide.addShape(pptx.ShapeType.roundRect, {
+      ...asBox(pillX, yPx, pillWidthPx, pillHeightPx),
+      fill: palette.pillBg,
+      line: { color: palette.pillBg },
+      rectRadius: pxRadiusToIn(999),
+    });
+
+    slide.addText(pill.toUpperCase(), {
+      ...sharedText,
+      ...asBox(pillX + 8, yPx + 6, pillWidthPx - 16, 20),
+      fontSize: pxToPt(12),
+      color: palette.pillColor,
+      bold: true,
+      charSpacing: 0.4,
+      align: "center",
+    });
+  });
+};
+
+const addJourney = (slide, pptx, xPx, yPx, widthPx, journey) => {
+  const gapPx = 14;
+  const stepWidthPx = (widthPx - gapPx * 3) / 4;
+  const stepHeightPx = 90;
+
+  journey.forEach((item, idx) => {
+    const stepX = xPx + idx * (stepWidthPx + gapPx);
+
+    // Step background
+    slide.addShape(pptx.ShapeType.roundRect, {
+      ...asBox(stepX, yPx, stepWidthPx, stepHeightPx),
+      fill: "f7f9fc",
+      line: { color: "e1e7ee", width: 1 },
+      rectRadius: pxRadiusToIn(16),
+    });
+
+    // Step icon
+    slide.addShape(pptx.ShapeType.roundRect, {
+      ...asBox(stepX + (stepWidthPx - 44) / 2, yPx + 10, 44, 44),
+      fill: "fdf6e8",
+      line: { color: "fdf6e8" },
+      rectRadius: pxRadiusToIn(14),
+    });
+
+    slide.addText(item.step, {
+      ...sharedText,
+      ...asBox(stepX + (stepWidthPx - 44) / 2, yPx + 20, 44, 24),
+      fontSize: pxToPt(14),
+      color: palette.pillColor,
+      bold: true,
+      align: "center",
+    });
+
+    // Step title
+    slide.addText(item.title, {
+      ...sharedText,
+      ...asBox(stepX + 4, yPx + 56, stepWidthPx - 8, 16),
+      fontSize: pxToPt(13),
+      color: palette.deepNavy,
+      bold: true,
+      align: "center",
+    });
+
+    // Step label
+    slide.addText(item.label, {
+      ...sharedText,
+      ...asBox(stepX + 4, yPx + 72, stepWidthPx - 8, 14),
+      fontSize: pxToPt(12),
+      color: palette.muted,
+      align: "center",
+    });
+  });
+};
+
+const addCard = (slide, pptx, xPx, yPx, widthPx, heightPx, cardData) => {
+  // Card background
   slide.addShape(pptx.ShapeType.roundRect, {
-    ...asBox(xPx, yPx, cardWidthPx, layout.cards.heightPx),
-    fill: "FFFFFF",
-    line: { color: "dde5ef" },
-    rectRadius: pxRadiusToIn(14),
-    shadow: { type: "outer", opacity: opacityToDecimal(16), blur: 7, offset: 0.14, angle: 90 },
+    ...asBox(xPx, yPx, widthPx, heightPx),
+    fill: palette.cardBg,
+    line: { color: "dde5ef", width: 1 },
+    rectRadius: pxRadiusToIn(18),
+    shadow: { type: "outer", opacity: opacityToDecimal(16), blur: 8, offset: 0.15, angle: 90 },
   });
 
   const paddingPx = DESIGN.cardPaddingPx;
-  const textWidthPx = cardWidthPx - paddingPx * 2;
+  const innerWidthPx = widthPx - paddingPx * 2;
+  let currentY = yPx + paddingPx;
 
-  slide.addText(scenario.title, {
+  // Card title
+  slide.addText(cardData.title.toUpperCase(), {
     ...sharedText,
-    ...asBox(xPx + paddingPx, yPx + paddingPx, textWidthPx, 26),
+    ...asBox(xPx + paddingPx, currentY, innerWidthPx, 22),
     fontSize: pxToPt(18),
     color: palette.deepNavy,
     bold: true,
+    charSpacing: 0.3,
   });
+  currentY += 28;
 
-  slide.addShape(pptx.ShapeType.roundRect, {
-    ...asBox(xPx + paddingPx, yPx + paddingPx + 30, 220, 34),
-    fill: scenario.pillFill,
-    line: { color: scenario.pillFill },
-    rectRadius: pxRadiusToIn(20),
-  });
+  // Handle different card types
+  if (cardData.type === "pills" && cardData.pills) {
+    addPillRow(slide, pptx, xPx + paddingPx, currentY, innerWidthPx, cardData.pills);
+    currentY += 46;
+  }
 
-  slide.addText(scenario.pill, {
-    ...sharedText,
-    ...asBox(xPx + paddingPx + 12, yPx + paddingPx + 34, 200, 24),
-    fontSize: pxToPt(12),
-    color: scenario.pillColor,
-    bold: true,
-  });
+  if (cardData.type === "journey" && cardData.journey) {
+    addJourney(slide, pptx, xPx + paddingPx, currentY, innerWidthPx, cardData.journey);
+    currentY += 104;
+  }
 
-  const metricsY = yPx + paddingPx + 68;
-  addMetrics(slide, pptx, xPx + paddingPx, metricsY, textWidthPx, scenario.metrics);
+  if (cardData.items && (cardData.type === "iconGrid" || cardData.type === "pills")) {
+    const endY = addIconGrid(slide, pptx, xPx + paddingPx, currentY, innerWidthPx, cardData.items);
+    currentY = endY;
+  }
 
-  const listStartY = metricsY + 112;
-  addBulletList(
-    slide,
-    pptx,
-    xPx + paddingPx,
-    listStartY,
-    textWidthPx,
-    scenario.bullets
-  );
+  // Add sparkline at the bottom if present
+  if (cardData.sparkline) {
+    const sparklineY = yPx + heightPx - paddingPx - 66;
+    addSparkline(slide, pptx, xPx + paddingPx, sparklineY, innerWidthPx, cardData.sparkline);
+  }
 };
 
-const addAsk = (slide, pptx, askLayout) => {
+const addAsk = (slide, pptx, askLayout, askData) => {
+  // Ask background
   slide.addShape(pptx.ShapeType.roundRect, {
     ...asBox(askLayout.xPx, askLayout.yPx, askLayout.wPx, askLayout.hPx),
-    fill: palette.deepNavy,
+    fill: { color: palette.deepNavy, type: "solid" },
     line: { color: palette.deepNavy },
+    rectRadius: pxRadiusToIn(18),
+    shadow: { type: "outer", opacity: opacityToDecimal(22), blur: 8, offset: 0.15, angle: 90 },
+  });
+
+  // Icon background
+  slide.addShape(pptx.ShapeType.roundRect, {
+    ...asBox(askLayout.xPx + 18, askLayout.yPx + 14, 48, 48),
+    fill: { color: palette.white, transparency: 88 },
+    line: { color: palette.white, transparency: 88 },
     rectRadius: pxRadiusToIn(14),
-    shadow: { type: "outer", opacity: opacityToDecimal(22), blur: 7, offset: 0.16, angle: 90 },
   });
 
-  slide.addShape(pptx.ShapeType.roundRect, {
-    ...asBox(askLayout.xPx + 16, askLayout.yPx + 14, 48, 48),
-    fill: { color: "FFFFFF", transparency: 78 },
-    line: { color: "FFFFFF", transparency: 78 },
-    rectRadius: pxRadiusToIn(12),
-  });
-
-  slide.addText("★", {
+  // Icon
+  slide.addText(askData.icon, {
     ...sharedText,
-    ...asBox(askLayout.xPx + 30, askLayout.yPx + 20, 18, 28),
-    fontSize: pxToPt(24),
-    color: "FFFFFF",
+    ...asBox(askLayout.xPx + 18, askLayout.yPx + 20, 48, 36),
+    fontSize: pxToPt(22),
+    color: palette.white,
+    align: "center",
+  });
+
+  // Title
+  slide.addText(askData.title, {
+    ...sharedText,
+    ...asBox(askLayout.xPx + 80, askLayout.yPx + 12, askLayout.wPx * 0.6, 24),
+    fontSize: pxToPt(18),
+    color: palette.white,
     bold: true,
   });
 
-  slide.addText("Our ask: Approve +3 FTE for 18 months", {
+  // Text
+  slide.addText(askData.text, {
     ...sharedText,
-    ...asBox(askLayout.xPx + 76, askLayout.yPx + 12, askLayout.wPx * 0.6, 28),
-    fontSize: pxToPt(16),
-    color: "FFFFFF",
-    bold: true,
+    ...asBox(askLayout.xPx + 80, askLayout.yPx + 38, askLayout.wPx * 0.6, 24),
+    fontSize: pxToPt(14),
+    color: "d5e2f2",
   });
 
-  slide.addText(
-    "Enables four concurrent tracks, accelerates policy pilots, and reduces operational risk while safeguarding BAU.",
-    {
-      ...sharedText,
-      ...asBox(askLayout.xPx + 76, askLayout.yPx + 36, askLayout.wPx * 0.6, 28),
-      fontSize: pxToPt(13),
-      color: "d5e2f2",
-    }
-  );
-
+  // CTA button background
   slide.addShape(pptx.ShapeType.roundRect, {
-    ...asBox(askLayout.xPx + askLayout.wPx - 210, askLayout.yPx + 16, 194, 46),
+    ...asBox(askLayout.xPx + askLayout.wPx - 130, askLayout.yPx + 18, 110, 40),
     fill: palette.gold,
     line: { color: palette.gold },
     rectRadius: pxRadiusToIn(12),
-    shadow: { type: "outer", opacity: opacityToDecimal(32), blur: 7, offset: 0.2, angle: 90 },
+    shadow: { type: "outer", opacity: opacityToDecimal(35), blur: 6, offset: 0.15, angle: 90 },
   });
 
-  slide.addText("Proceed with Preferred Plan", {
+  // CTA text
+  slide.addText(askData.cta.toUpperCase(), {
     ...sharedText,
-    ...asBox(askLayout.xPx + askLayout.wPx - 190, askLayout.yPx + 22, 160, 28),
+    ...asBox(askLayout.xPx + askLayout.wPx - 125, askLayout.yPx + 24, 100, 28),
     fontSize: pxToPt(12),
     color: "1f1606",
     bold: true,
+    charSpacing: 0.4,
+    align: "center",
   });
 };
 
-const buildSlide = (pptx) => {
+const buildSlide = (pptx, slideData, isSplit = false) => {
   const slide = pptx.addSlide();
-  const layout = computeLayout();
+  const layout = computeLayout(isSplit);
 
   addShell(slide, layout, pptx);
-  addHeader(slide, pptx, layout);
-  addScenarioCard(
+  addHeader(slide, pptx, layout, slideData.header);
+
+  // Left card
+  addCard(
     slide,
     pptx,
     layout.content.xPx,
+    layout.cards.yPx,
     layout.cards.leftWidthPx,
-    scenarios[0],
-    layout
+    layout.cards.heightPx,
+    slideData.leftCard
   );
-  addScenarioCard(
+
+  // Right card
+  addCard(
     slide,
     pptx,
     layout.content.xPx + layout.cards.leftWidthPx + DESIGN.columnGapPx,
+    layout.cards.yPx,
     layout.cards.rightWidthPx,
-    scenarios[1],
-    layout
+    layout.cards.heightPx,
+    slideData.rightCard
   );
-  addAsk(slide, pptx, layout.ask);
+
+  addAsk(slide, pptx, layout.ask, slideData.ask);
 };
 
 const createDeck = () => {
   const pptx = new PptxGenJS();
   pptx.layout = "LAYOUT_16x9";
-  buildSlide(pptx);
+  pptx.title = "From Pilot to Production: Industrialising AI in a Central Bank";
+  pptx.author = "Central Bank AI Strategy";
+
+  // Build both slides from HTML content
+  buildSlide(pptx, slidesData[0], false);
+  buildSlide(pptx, slidesData[1], true);
+
   return pptx;
 };
 
@@ -500,7 +629,7 @@ const writeNormalizedPptx = async (pptx, outputPath) => {
 };
 
 async function buildSlides(
-  outputPath = path.join(__dirname, "..", "dist", "deck.pptx")
+  outputPath = path.join(__dirname, "..", "artifacts", "slides", "latest.pptx")
 ) {
   const pptx = createDeck();
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
