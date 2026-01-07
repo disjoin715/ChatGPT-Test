@@ -13,8 +13,8 @@
       --soft-gray: #f4f6f8;
       --text: #0c1b2a;
       --muted: #4a5c70;
-      --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-      --radius: 16px;
+      --card-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+      --radius: 18px;
     }
 
     * {
@@ -25,8 +25,8 @@
     }
 
     body {
-      background: radial-gradient(circle at 20% 20%, rgba(127, 180, 224, 0.15), transparent 40%),
-                  radial-gradient(circle at 80% 30%, rgba(225, 180, 76, 0.12), transparent 35%),
+      background: radial-gradient(circle at 15% 20%, rgba(127, 180, 224, 0.2), transparent 45%),
+                  radial-gradient(circle at 80% 25%, rgba(225, 180, 76, 0.16), transparent 40%),
                   var(--deep-navy);
       color: var(--text);
       display: flex;
@@ -38,19 +38,19 @@
 
     .deck {
       display: grid;
-      gap: 32px;
+      gap: 36px;
     }
 
     .slide {
       width: 1280px;
       height: 720px;
-      background: linear-gradient(145deg, #f9fbff 0%, #eef2f7 100%);
-      border-radius: 22px;
-      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.2);
-      padding: 36px 42px;
+      background: linear-gradient(145deg, #f9fbff 0%, #edf2f8 100%);
+      border-radius: 26px;
+      box-shadow: 0 32px 80px rgba(0, 0, 0, 0.24);
+      padding: 40px 44px;
       display: grid;
       grid-template-rows: auto 1fr auto;
-      gap: 22px;
+      gap: 26px;
       position: relative;
       overflow: hidden;
     }
@@ -59,7 +59,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(23, 57, 92, 0.12) 0%, transparent 50%);
+      background: linear-gradient(120deg, rgba(23, 57, 92, 0.12) 0%, transparent 55%);
       pointer-events: none;
     }
 
@@ -69,39 +69,39 @@
       align-items: center;
       position: relative;
       z-index: 1;
-      gap: 16px;
+      gap: 20px;
     }
 
     .title-block {
-      max-width: 70%;
+      max-width: 72%;
     }
 
     .eyebrow {
-      font-size: 14px;
-      letter-spacing: 0.22em;
+      font-size: 12px;
+      letter-spacing: 0.32em;
       color: var(--muted);
       text-transform: uppercase;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       font-weight: 600;
     }
 
     h1 {
-      font-size: 30px;
+      font-size: 34px;
       color: var(--deep-navy);
-      line-height: 1.3;
+      line-height: 1.2;
     }
 
     .subtitle {
-      font-size: 16px;
+      font-size: 17px;
       color: var(--muted);
-      margin-top: 6px;
+      margin-top: 10px;
     }
 
     .badge {
       background: var(--deep-navy);
       color: #fff;
-      padding: 12px 16px;
-      border-radius: 12px;
+      padding: 12px 18px;
+      border-radius: 14px;
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -119,8 +119,8 @@
 
     .content {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 18px;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
       position: relative;
       z-index: 1;
     }
@@ -133,92 +133,135 @@
       background: #fff;
       border-radius: var(--radius);
       box-shadow: var(--card-shadow);
-      padding: 22px;
+      padding: 24px;
       border: 1px solid #dde5ef;
       display: grid;
-      gap: 12px;
+      gap: 18px;
     }
 
     .card h2 {
       font-size: 18px;
       color: var(--deep-navy);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      background: #f2f6fb;
-      color: var(--mid-navy);
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-
-    .metric {
-      background: var(--soft-gray);
-      border-radius: 12px;
-      padding: 12px 14px;
-      border: 1px solid #e1e7ee;
-    }
-
-    .metric .label {
-      font-size: 11px;
-      color: var(--muted);
       letter-spacing: 0.03em;
       text-transform: uppercase;
-      margin-bottom: 4px;
-      font-weight: 600;
     }
 
-    .metric .value {
-      font-size: 17px;
+    .icon-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .icon-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .icon-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--mid-navy), #24496f);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      box-shadow: 0 12px 24px rgba(23, 57, 92, 0.3);
+    }
+
+    .icon-item h3 {
+      font-size: 16px;
+      color: var(--deep-navy);
+    }
+
+    .icon-item p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .sparkline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .spark {
+      border-radius: 16px;
+      padding: 16px;
+      background: var(--soft-gray);
+      border: 1px solid #e1e7ee;
+      text-align: center;
+    }
+
+    .spark .value {
+      font-size: 20px;
       color: var(--deep-navy);
       font-weight: 700;
     }
 
-    .list {
-      display: grid;
-      gap: 8px;
-    }
-
-    .list-item {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .bullet {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--accent-gold);
-      margin-top: 6px;
-      box-shadow: 0 0 0 4px rgba(225, 180, 76, 0.18);
-    }
-
-    .list-item h3 {
-      font-size: 15px;
-      color: var(--deep-navy);
-      margin-bottom: 2px;
-    }
-
-    .list-item p {
+    .spark .label {
+      font-size: 12px;
       color: var(--muted);
-      font-size: 13.5px;
-      line-height: 1.5;
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .journey {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .journey-step {
+      background: #f7f9fc;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #e1e7ee;
+      display: grid;
+      gap: 10px;
+      text-align: center;
+    }
+
+    .journey-step .step-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto;
+      border-radius: 14px;
+      background: rgba(225, 180, 76, 0.18);
+      color: #6f5316;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+    }
+
+    .journey-step h4 {
+      font-size: 13px;
+      color: var(--deep-navy);
+    }
+
+    .journey-step span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      background: #fdf6e8;
+      color: #6f5316;
+      letter-spacing: 0.04em;
     }
 
     .ask {
@@ -231,12 +274,14 @@
       align-items: center;
       gap: 14px;
       box-shadow: var(--card-shadow);
+      position: relative;
+      z-index: 1;
     }
 
     .ask .icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
       background: rgba(255, 255, 255, 0.12);
       display: grid;
       place-items: center;
@@ -244,65 +289,27 @@
     }
 
     .ask .text h3 {
-      font-size: 17px;
+      font-size: 18px;
       margin-bottom: 6px;
     }
 
     .ask .text p {
       font-size: 14px;
       color: #d5e2f2;
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     .ask .cta {
       background: var(--accent-gold);
       color: #1f1606;
       border: none;
-      padding: 10px 16px;
-      border-radius: 10px;
+      padding: 10px 18px;
+      border-radius: 12px;
       font-weight: 700;
       box-shadow: 0 10px 20px rgba(225, 180, 76, 0.35);
-      letter-spacing: 0.02em;
-    }
-
-    .timeline {
-      display: grid;
-      gap: 12px;
-    }
-
-    .timeline-step {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 12px;
-      align-items: start;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: #f7f9fc;
-      border: 1px solid #e1e7ee;
-    }
-
-    .step-number {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: var(--mid-navy);
-      color: #fff;
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .timeline-step h4 {
-      font-size: 14px;
-      color: var(--deep-navy);
-      margin-bottom: 4px;
-    }
-
-    .timeline-step p {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -311,9 +318,9 @@
     <section class="slide" aria-label="From pilot to production overview">
       <header class="header">
         <div class="title-block">
-          <div class="eyebrow">Central Bank AI Strategy · Executive Briefing</div>
-          <h1>From Pilot to Production: What Really Takes to Industrialise AI</h1>
-          <p class="subtitle">Building trusted, resilient, and mission-ready AI across policy, supervision, and operations.</p>
+          <div class="eyebrow">Central Bank AI Strategy</div>
+          <h1>From Pilot to Production</h1>
+          <p class="subtitle">Trusted, resilient AI for policy, supervision, and market operations.</p>
         </div>
         <div class="badge" aria-label="Presentation theme">
           <span class="dot" aria-hidden="true"></span>
@@ -322,82 +329,74 @@
       </header>
 
       <section class="content" aria-label="Use cases and readiness">
-        <article class="card" aria-label="Priority AI use cases">
-          <h2>
-            Priority Use Cases
-            <span class="pill">Policy, Supervision, Markets</span>
-          </h2>
-          <div class="metrics" aria-label="Use case impact">
-            <div class="metric">
-              <div class="label">Policy Insight</div>
-              <div class="value">Forecasting & Scenario Design</div>
-            </div>
-            <div class="metric">
-              <div class="label">Supervisory Reach</div>
-              <div class="value">Early Warning Signals</div>
-            </div>
-            <div class="metric">
-              <div class="label">Operations</div>
-              <div class="value">Automation at Scale</div>
-            </div>
-          </div>
-          <div class="list" aria-label="Use case details">
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+        <article class="card" aria-label="Priority use cases">
+          <h2>Priority Use Cases</h2>
+          <div class="icon-grid" aria-label="Use case highlights">
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">◎</div>
               <div>
                 <h3>Macro-financial intelligence</h3>
-                <p>Systemic risk detection, climate stress testing, and liquidity monitoring at decision speed.</p>
+                <p>Stress testing · systemic risk · liquidity signals</p>
               </div>
             </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">◆</div>
               <div>
-                <h3>Market operations & reserves</h3>
-                <p>Smarter collateral optimization, anomaly detection, and portfolio analytics.</p>
+                <h3>Supervisory early warning</h3>
+                <p>Outlier detection · conduct monitoring · alerts</p>
               </div>
             </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">◈</div>
               <div>
-                <h3>Institutional productivity</h3>
-                <p>Secure copilots for drafting, translation, regulatory reporting, and knowledge search.</p>
+                <h3>Operational excellence</h3>
+                <p>Secure copilots · reporting · translation</p>
               </div>
+            </div>
+          </div>
+          <div class="sparkline" aria-label="Impact markers">
+            <div class="spark">
+              <div class="value">Policy</div>
+              <div class="label">Foresight</div>
+            </div>
+            <div class="spark">
+              <div class="value">Supervision</div>
+              <div class="label">Precision</div>
+            </div>
+            <div class="spark">
+              <div class="value">Operations</div>
+              <div class="label">Resilience</div>
             </div>
           </div>
         </article>
 
         <article class="card" aria-label="Conditions for scale">
-          <h2>
-            Conditions for Scale
-            <span class="pill">Risk, Data, Talent</span>
-          </h2>
-          <div class="list" aria-label="Scale conditions">
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+          <h2>What Enables Scale</h2>
+          <div class="pill-row" aria-label="Scale pillars">
+            <div class="pill">Trusted Data</div>
+            <div class="pill">Model Risk</div>
+            <div class="pill">Secure MLOps</div>
+          </div>
+          <div class="icon-grid" aria-label="Scale visuals">
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">◍</div>
               <div>
-                <h3>Trusted data foundation</h3>
-                <p>Golden sources, lineage, and access controls aligned with supervisory confidentiality.</p>
+                <h3>Golden sources</h3>
+                <p>Lineage and access aligned with confidentiality.</p>
               </div>
             </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">✓</div>
               <div>
-                <h3>Model risk governance</h3>
-                <p>Validated performance, explainability, and human oversight for every release.</p>
+                <h3>Governance by design</h3>
+                <p>Validation, explainability, and human oversight.</p>
               </div>
             </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">⬡</div>
               <div>
-                <h3>Industrial-grade MLOps</h3>
-                <p>Secure deployment, monitoring, and resilience consistent with critical infrastructure.</p>
-              </div>
-            </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
-              <div>
-                <h3>Skills & operating model</h3>
-                <p>Product owners, data stewards, and model validators embedded in every mission line.</p>
+                <h3>Production resilience</h3>
+                <p>Monitoring, drift response, and auditability.</p>
               </div>
             </div>
           </div>
@@ -405,12 +404,12 @@
       </section>
 
       <section class="ask" aria-label="Executive priority">
-        <div class="icon" aria-hidden="true">◆</div>
+        <div class="icon" aria-hidden="true">✦</div>
         <div class="text">
           <h3>Executive Priority</h3>
-          <p>Shift from pilot enthusiasm to production discipline: institutionalize governance, invest in data, and scale responsibly.</p>
+          <p>Institutionalise governance and invest in the data backbone to scale AI with confidence.</p>
         </div>
-        <div class="cta" aria-label="Institutional mandate">Institutional Mandate</div>
+        <div class="cta" aria-label="Institutional mandate">Mandate</div>
       </section>
     </section>
 
@@ -418,8 +417,8 @@
       <header class="header">
         <div class="title-block">
           <div class="eyebrow">Lifecycle & Governance</div>
-          <h1>Lifecycle Discipline and Democratized Innovation</h1>
-          <p class="subtitle">A repeatable delivery model that protects public trust while accelerating impact.</p>
+          <h1>Lifecycle Discipline + Democratized Innovation</h1>
+          <p class="subtitle">A repeatable model for trusted deployment and enterprise adoption.</p>
         </div>
         <div class="badge" aria-label="Lifecycle focus">
           <span class="dot" aria-hidden="true"></span>
@@ -429,101 +428,94 @@
 
       <section class="content split" aria-label="Lifecycle and democratization">
         <article class="card" aria-label="AI lifecycle">
-          <h2>
-            End-to-End AI Lifecycle
-            <span class="pill">Governance Embedded</span>
-          </h2>
-          <div class="timeline" aria-label="Lifecycle steps">
-            <div class="timeline-step">
-              <div class="step-number">01</div>
-              <div>
-                <h4>Use-case qualification</h4>
-                <p>Strategic alignment, legal basis, and data availability confirmed before funding.</p>
-              </div>
+          <h2>End-to-End Lifecycle</h2>
+          <div class="journey" aria-label="Lifecycle steps">
+            <div class="journey-step">
+              <div class="step-icon">01</div>
+              <h4>Qualify</h4>
+              <span>Strategic fit</span>
             </div>
-            <div class="timeline-step">
-              <div class="step-number">02</div>
-              <div>
-                <h4>Design & validation</h4>
-                <p>Model risk assessments, bias testing, and stakeholder sign-offs built into design.</p>
-              </div>
+            <div class="journey-step">
+              <div class="step-icon">02</div>
+              <h4>Validate</h4>
+              <span>Model risk</span>
             </div>
-            <div class="timeline-step">
-              <div class="step-number">03</div>
-              <div>
-                <h4>Secure deployment</h4>
-                <p>Controlled release, audit logging, and monitoring aligned with cyber standards.</p>
-              </div>
+            <div class="journey-step">
+              <div class="step-icon">03</div>
+              <h4>Deploy</h4>
+              <span>Secure release</span>
             </div>
-            <div class="timeline-step">
-              <div class="step-number">04</div>
-              <div>
-                <h4>Operations & audit</h4>
-                <p>Continuous performance, drift, and compliance reporting to governance forums.</p>
-              </div>
+            <div class="journey-step">
+              <div class="step-icon">04</div>
+              <h4>Monitor</h4>
+              <span>Audit ready</span>
+            </div>
+          </div>
+          <div class="sparkline" aria-label="Lifecycle anchors">
+            <div class="spark">
+              <div class="value">Governed</div>
+              <div class="label">By design</div>
+            </div>
+            <div class="spark">
+              <div class="value">Secure</div>
+              <div class="label">Every release</div>
+            </div>
+            <div class="spark">
+              <div class="value">Measured</div>
+              <div class="label">Outcomes</div>
             </div>
           </div>
         </article>
 
         <article class="card" aria-label="Democratization">
-          <h2>
-            Democratizing AI Innovation
-            <span class="pill">Safely Scaled</span>
-          </h2>
-          <div class="list" aria-label="Democratization initiatives">
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+          <h2>Democratize Innovation</h2>
+          <div class="icon-grid" aria-label="Democratization initiatives">
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">◎</div>
               <div>
-                <h3>Federated innovation hubs</h3>
-                <p>Domain squads co-create solutions with the AI center of excellence.</p>
+                <h3>Federated squads</h3>
+                <p>Domain teams co-create with the AI center of excellence.</p>
               </div>
             </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">◆</div>
               <div>
-                <h3>Reusable platforms & APIs</h3>
-                <p>Shared data products, model libraries, and secure sandbox environments.</p>
+                <h3>Shared platforms</h3>
+                <p>Reusable data products, model libraries, and APIs.</p>
               </div>
             </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
+            <div class="icon-item">
+              <div class="icon-circle" aria-hidden="true">◈</div>
               <div>
                 <h3>Capability uplift</h3>
-                <p>Executive training, analyst academies, and certified model risk training.</p>
-              </div>
-            </div>
-            <div class="list-item">
-              <div class="bullet" aria-hidden="true"></div>
-              <div>
-                <h3>Governed experimentation</h3>
-                <p>Innovation challenges with pre-approved datasets and ethics reviews.</p>
+                <p>Executive briefings, analyst academies, certified training.</p>
               </div>
             </div>
           </div>
-          <div class="metrics" aria-label="Democratization outcomes">
-            <div class="metric">
-              <div class="label">Time-to-Value</div>
-              <div class="value">30% Faster Delivery</div>
+          <div class="sparkline" aria-label="Democratization outcomes">
+            <div class="spark">
+              <div class="value">30%</div>
+              <div class="label">Faster delivery</div>
             </div>
-            <div class="metric">
+            <div class="spark">
+              <div class="value">Enterprise</div>
               <div class="label">Adoption</div>
-              <div class="value">Enterprise-Wide</div>
             </div>
-            <div class="metric">
-              <div class="label">Trust</div>
-              <div class="value">Audit-Ready</div>
+            <div class="spark">
+              <div class="value">Audit</div>
+              <div class="label">Confidence</div>
             </div>
           </div>
         </article>
       </section>
 
       <section class="ask" aria-label="Strategic close">
-        <div class="icon" aria-hidden="true">✦</div>
+        <div class="icon" aria-hidden="true">◆</div>
         <div class="text">
           <h3>Strategic Close</h3>
-          <p>Industrialising AI means embedding governance, empowering talent, and delivering measurable outcomes in every mandate.</p>
+          <p>Align governance, talent, and platforms to industrialise AI with public trust.</p>
         </div>
-        <div class="cta" aria-label="Commitment">Institutional Commitment</div>
+        <div class="cta" aria-label="Commitment">Commit</div>
       </section>
     </section>
   </main>
