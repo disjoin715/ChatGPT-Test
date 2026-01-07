@@ -500,7 +500,7 @@ const writeNormalizedPptx = async (pptx, outputPath) => {
 };
 
 async function buildSlides(
-  outputPath = path.join(__dirname, "..", "artifacts", "slides", "latest.pptx")
+  outputPath = path.join(__dirname, "..", "dist", "deck.pptx")
 ) {
   const pptx = createDeck();
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
