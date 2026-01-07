@@ -14,6 +14,7 @@
 6. [Icons & Symbols](#icons--symbols)
 7. [Content Guidelines](#content-guidelines)
 8. [Customization](#customization)
+9. [MA_Theme.thmx Reference](#ma_themethmx-reference)
 
 ---
 
@@ -407,10 +408,158 @@ const DESIGN = {
 
 ---
 
+## MA_Theme.thmx Reference
+
+This section documents the custom formatting in `MA_Theme.thmx` that differs from default PowerPoint themes.
+
+### Theme Color Scheme
+
+The theme uses a custom color scheme named "Custom 1" with these colors (different from default Office blue-centric scheme):
+
+| Role | Hex Code | Default PPT | Notes |
+|------|----------|-------------|-------|
+| Dark 1 | `#000000` | Same | System text color |
+| Light 1 | `#FFFFFF` | Same | System background |
+| **Dark 2** | `#323232` | `#44546A` | Custom dark gray (vs default slate) |
+| **Light 2** | `#E3DED1` | `#E7E6E6` | Warm beige (vs cool gray) |
+| **Accent 1** | `#604878` | `#4472C4` | Purple (vs blue) |
+| **Accent 2** | `#D86B77` | `#ED7D31` | Coral/pink (vs orange) |
+| **Accent 3** | `#8EC182` | `#A5A5A5` | Light green (vs gray) |
+| **Accent 4** | `#F9B268` | `#FFC000` | Soft orange (vs yellow) |
+| **Accent 5** | `#1B587C` | `#5B9BD5` | Dark teal (vs light blue) |
+| **Accent 6** | `#B26B02` | `#70AD47` | Brown/amber (vs green) |
+| **Hyperlink** | `#4EA5D8` | `#0563C1` | Light blue (vs standard blue) |
+| **Followed Link** | `#B26B02` | `#954F72` | Brown (vs purple) |
+
+#### Color Code for PptxGenJS (Theme Colors)
+
+```javascript
+const themeColors = {
+  dk2: "323232",       // Custom dark gray
+  lt2: "E3DED1",       // Warm beige
+  accent1: "604878",   // Purple
+  accent2: "D86B77",   // Coral/pink
+  accent3: "8EC182",   // Light green
+  accent4: "F9B268",   // Soft orange
+  accent5: "1B587C",   // Dark teal
+  accent6: "B26B02",   // Brown/amber
+  hlink: "4EA5D8",     // Hyperlink blue
+  folHlink: "B26B02",  // Followed hyperlink
+};
+```
+
+### Theme Font Scheme
+
+The theme uses a custom font scheme named "Terence_2" (differs from default Calibri-based fonts):
+
+| Role | MA_Theme Font | Default PPT Font |
+|------|---------------|------------------|
+| **Major (Headings)** | Segoe UI | Calibri Light |
+| **Minor (Body)** | Segoe UI Light | Calibri |
+| **East Asian** | 微軟正黑體 (Microsoft JhengHei) | MS Gothic / SimSun |
+
+### Master Slide Background
+
+| Property | MA_Theme | Default PPT |
+|----------|----------|-------------|
+| **Background** | Light 1 @ 95% luminosity (off-white) | Pure white (100%) |
+
+### Title Text Style (Master Slide)
+
+| Property | MA_Theme | Default PPT |
+|----------|----------|-------------|
+| **Font Size** | 28pt | 44pt |
+| **Font Weight** | Bold | Regular |
+| **Font** | Segoe UI | Calibri Light |
+| **Color** | bg1 (white/light background) | dk1 (black) |
+| **Alignment** | Center | Left |
+
+### Body Text Style (Master Slide - Multi-level Bullets)
+
+| Level | Size | Bullet | Font |
+|-------|------|--------|------|
+| 1 | 32pt | • | Segoe UI Light |
+| 2 | 28pt | – | Segoe UI Light |
+| 3 | 24pt | • | Segoe UI Light |
+| 4 | 20pt | – | Segoe UI Light |
+| 5 | 20pt | » | Segoe UI Light |
+| 6-9 | 20pt | • | Minor font |
+
+**Default PowerPoint typically uses:**
+- Level 1: 32pt with circle bullet
+- All levels: same dash/circle style bullets
+- Calibri font family
+
+### Paragraph Spacing
+
+| Property | MA_Theme | Default PPT |
+|----------|----------|-------------|
+| **Space Before** | 20% of line height | 0% |
+| **Hanging Indent** | Yes | Yes |
+
+### Slide Layout: Light_Base_HKMA (Layout 1)
+
+| Element | Property | Value |
+|---------|----------|-------|
+| **Title** | Size | 20pt |
+| **Title** | Weight | Regular (not bold) |
+| **Title** | Color | `#33018D` (deep violet) |
+| **Title** | Font | Segoe UI Light |
+| **Section Title** | Size | 14pt |
+| **Section Title** | Weight | Bold |
+| **Section Title** | Color | `#33018D` |
+| **Left Accent Bar** | Width | ~143px |
+| **Left Accent Bar** | Color | `#33018D` |
+| **Page Number** | Size | 11pt |
+| **Page Number** | Position | Bottom right |
+
+### Slide Layout: Light_Divider (Layout 2)
+
+| Element | Property | Value |
+|---------|----------|-------|
+| **Title** | Size | 36pt |
+| **Title** | Weight | Regular |
+| **Title** | Color | dk1 @ 75% luminosity (dark gray) |
+| **Subtitle** | Size | 24pt |
+| **Subtitle** | Weight | Bold |
+| **Subtitle** | Font | Segoe UI |
+
+### Effect Styles (Shadows)
+
+The theme defines three shadow levels with these parameters (in EMUs, 1 inch = 914400 EMUs):
+
+| Style | Blur Radius | Distance | Direction | Opacity |
+|-------|-------------|----------|-----------|---------|
+| **Subtle** | 40000 EMUs (~0.044in) | 20000 EMUs (~0.022in) | 90° (down) | 38% |
+| **Medium** | 40000 EMUs (~0.044in) | 23000 EMUs (~0.025in) | 90° (down) | 35% |
+| **Intense** | 40000 EMUs (~0.044in) | 23000 EMUs (~0.025in) | 90° (down) | 35% + 3D bevel |
+
+#### Effect Style 3 - 3D Bevel Settings
+
+```javascript
+{
+  camera: "orthographicFront",
+  lightRig: "threePt",
+  bevelTop: { width: 63500, height: 25400 }  // EMUs
+}
+```
+
+### Key Brand Color: Deep Violet
+
+The theme uses `#33018D` as a key brand color for:
+- Title text on content slides
+- Section titles
+- Left accent bar
+
+This is **not** part of the standard theme color slots but is hardcoded into layouts.
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-01-07 | Added MA_Theme.thmx reference section |
 | 1.0 | 2026-01-07 | Initial style guide |
 
 ---

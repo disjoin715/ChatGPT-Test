@@ -1,17 +1,29 @@
 {
-  "name": "chatgpt-test",
+  "name": "powerpoint-generator",
   "version": "1.0.0",
-  "description": "",
+  "description": "MCP-enabled PowerPoint generator following MA_Theme style guide",
   "main": "index.js",
+  "bin": {
+    "pptx-mcp-server": "./mcp-server.js"
+  },
   "scripts": {
     "build:slides": "node scripts/build-slides.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "mcp": "node mcp-server.js",
+    "test": "node test-mcp.js"
   },
-  "keywords": [],
+  "keywords": [
+    "powerpoint",
+    "pptx",
+    "mcp",
+    "slides",
+    "presentation"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "jszip": "^3.10.1",
     "pptxgenjs": "^4.0.1"
   }
 }
