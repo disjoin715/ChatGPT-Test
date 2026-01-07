@@ -1,21 +1,22 @@
-# HTML to PowerPoint Slide Generator
+# PowerPoint Generator with MCP Support
 
-This project converts HTML-based slide content into fully editable PowerPoint presentations using [PptxGenJS](https://gitbrent.github.io/PptxGenJS/).
+This project provides **MCP (Model Context Protocol) tools** for generating professionally styled PowerPoint presentations, plus a traditional HTML-to-PPTX conversion pipeline using [PptxGenJS](https://gitbrent.github.io/PptxGenJS/).
 
-> **For AI Coding Agents:** This README and the accompanying [STYLE_GUIDE.md](./STYLE_GUIDE.md) serve as your primary reference when generating or modifying PowerPoint slides. Always read both files before making changes.
+> **For AI Coding Agents:** This project includes an MCP server that exposes PowerPoint generation as callable tools. See [SKILLS.md](./SKILLS.md) for usage patterns and [STYLE_GUIDE.md](./STYLE_GUIDE.md) for visual design specifications.
 
 ---
 
 ## Table of Contents
 
 1. [Quick Start](#quick-start)
-2. [End-to-End Flow](#end-to-end-flow)
-3. [Project Structure](#project-structure)
-4. [HTML Content Format](#html-content-format)
-5. [Slide Data Structure](#slide-data-structure)
-6. [Component Reference](#component-reference)
-7. [Publishing Workflow](#publishing-workflow)
-8. [For AI Agents](#for-ai-agents)
+2. [MCP Server Setup](#mcp-server-setup)
+3. [End-to-End Flow](#end-to-end-flow)
+4. [Project Structure](#project-structure)
+5. [HTML Content Format](#html-content-format)
+6. [Slide Data Structure](#slide-data-structure)
+7. [Component Reference](#component-reference)
+8. [Publishing Workflow](#publishing-workflow)
+9. [For AI Agents](#for-ai-agents)
 
 ---
 
@@ -23,13 +24,99 @@ This project converts HTML-based slide content into fully editable PowerPoint pr
 
 ```bash
 # Install dependencies
-npm ci
+npm install
 
-# Generate the PowerPoint deck
+# Generate the PowerPoint deck (from HTML)
 npm run build:slides
 
 # Output: artifacts/slides/latest.pptx
+
+# Run MCP server
+npm run mcp
+
+# Test the slide builder
+npm test
 ```
+
+---
+
+## MCP Server Setup
+
+### For Cursor / Claude Desktop
+
+Add to your MCP configuration (e.g., `~/.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "powerpoint-generator": {
+      "command": "node",
+      "args": ["/path/to/workspace/mcp-server.js"],
+      "env": {}
+    }
+  }
+}
+```
+
+### Available MCP Tools
+
+| Tool | Description |
+|------|-------------|
+| `generate_slide` | Create a single PowerPoint slide with custom content |
+| `generate_presentation` | Create a full presentation with multiple slides |
+| `list_templates` | List available slide templates and content types |
+| `get_color_palette` | Get the complete color palette from the style guide |
+| `get_icons` | Get recommended Unicode icons/symbols |
+
+### Available MCP Resources
+
+| Resource URI | Description |
+|--------------|-------------|
+| `pptx://style-guide` | Complete STYLE_GUIDE.md documentation |
+| `pptx://theme-reference` | MA_Theme.thmx formatting reference |
+
+### Example Usage (MCP Tool Call)
+
+```javascript
+// generate_slide tool
+{
+  "header": {
+    "eyebrow": "Strategy Overview",
+    "title": "AI-Powered Operations",
+    "subtitle": "Modernizing workflows with intelligent automation.",
+    "badge": "2024 Initiative"
+  },
+  "leftCard": {
+    "title": "Key Capabilities",
+    "type": "iconGrid",
+    "items": [
+      { "icon": "◎", "title": "Automation", "detail": "Streamline processes." },
+      { "icon": "◆", "title": "Analytics", "detail": "Data-driven insights." }
+    ],
+    "sparkline": [
+      { "value": "40%", "label": "Efficiency" },
+      { "value": "3x", "label": "Speed" },
+      { "value": "99%", "label": "Accuracy" }
+    ]
+  },
+  "rightCard": {
+    "title": "Success Factors",
+    "type": "pills",
+    "pills": ["Data", "Governance", "Talent"],
+    "items": [
+      { "icon": "✓", "title": "Quality", "detail": "Clean data." }
+    ]
+  },
+  "ask": {
+    "icon": "✦",
+    "title": "Next Steps",
+    "text": "Approve funding for Phase 2.",
+    "cta": "Approve"
+  }
+}
+```
+
+See [SKILLS.md](./SKILLS.md) for comprehensive usage documentation.
 
 ---
 
@@ -90,8 +177,15 @@ Push to `main` branch triggers the "Publish Slides" workflow, which:
 ```
 ├── index.html              # Source HTML with slide content
 ├── STYLE_GUIDE.md          # Visual design preferences (READ THIS!)
+├── SKILLS.md               # MCP tool usage documentation (for AI agents)
+├── MA_Theme.thmx           # PowerPoint theme file (color/font reference)
+├── mcp-server.js           # MCP server exposing PowerPoint tools
+├── lib/
+│   └── slide-builder.js    # Core slide generation library
 ├── scripts/
-│   └── build-slides.js     # Main conversion script
+│   └── build-slides.js     # HTML-to-PPTX conversion script
+├── test-mcp.js             # Test script for slide builder
+├── output/                 # Generated test files (gitignored)
 ├── artifacts/
 │   └── slides/
 │       └── latest.pptx     # Generated output (gitignored)
@@ -283,41 +377,59 @@ Published PPTX is available at:
 
 ## For AI Agents
 
-### Before Making Changes
+### Recommended Approach: Use MCP Tools
 
-1. **Read `STYLE_GUIDE.md`** - Contains color palette, typography, spacing, and layout preferences
-2. **Review `index.html`** - Understand the current content structure
-3. **Check `build-slides.js`** - See how components are implemented
+The easiest way to generate slides is via the MCP server:
 
-### When Generating New Slides
+1. **Use the `generate_slide` tool** for single slides
+2. **Use the `generate_presentation` tool** for full decks
+3. **Use `list_templates`** to see available content patterns
+4. **Use `get_color_palette`** and `get_icons`** for styling reference
 
-1. **Follow the data structure** defined in [Slide Data Structure](#slide-data-structure)
-2. **Use the color palette** from `STYLE_GUIDE.md`
-3. **Maintain consistent spacing** using the `DESIGN` constants
-4. **Test locally** with `npm run build:slides` before committing
+See **[SKILLS.md](./SKILLS.md)** for comprehensive MCP tool documentation.
 
-### Common Tasks
+### Alternative: Direct Library Usage
 
-| Task | Action |
-|------|--------|
-| Add new slide | Add entry to `slidesData` array |
-| Change colors | Update `palette` object and `STYLE_GUIDE.md` |
-| Modify layout | Update `DESIGN` constants |
-| Add new component type | Create new `add{Component}()` function |
-| Update content only | Modify `slidesData` entries or `index.html` |
+```javascript
+const { SlideBuilder } = require('./lib/slide-builder');
+
+const builder = new SlideBuilder();
+await builder.buildSingleSlide(slideData, './output/slide.pptx');
+await builder.buildPresentation(slides, './output/deck.pptx', 'Title', 'Author');
+```
 
 ### Key Files to Reference
 
 | File | Purpose |
 |------|---------|
+| `SKILLS.md` | **START HERE** - MCP tool usage and examples |
 | `STYLE_GUIDE.md` | Visual design preferences (colors, fonts, spacing) |
-| `index.html` | Source content and HTML structure examples |
-| `scripts/build-slides.js` | Conversion logic and component implementations |
+| `lib/slide-builder.js` | Core library for programmatic usage |
+| `mcp-server.js` | MCP server implementation |
+| `index.html` | HTML content structure examples |
+| `scripts/build-slides.js` | HTML-to-PPTX conversion logic |
+
+### Before Making Changes
+
+1. **Read `SKILLS.md`** - Understand MCP tools and data structures
+2. **Read `STYLE_GUIDE.md`** - Contains color palette, typography, spacing
+3. **Review `MA_Theme.thmx` section** in STYLE_GUIDE.md - Theme-specific formatting
+
+### Common Tasks
+
+| Task | Recommended Method |
+|------|-------------------|
+| Generate single slide | MCP `generate_slide` tool |
+| Generate full deck | MCP `generate_presentation` tool |
+| Add new slide to existing | Modify `slidesData` in `build-slides.js` |
+| Change colors | Update `palette` in `lib/slide-builder.js` and `STYLE_GUIDE.md` |
+| Add new component type | Create new function in `lib/slide-builder.js` |
 
 ### Technical Notes
 
 - **Slide dimensions**: 1280×720 px design grid → 10×5.625 inch output
 - **Font**: Segoe UI (Windows-safe, consistent sizing)
+- **Theme colors**: MA_Theme.thmx defines custom palette (purple-led, not blue)
 - **Shapes**: All use explicit dimensions to avoid zero-sized OOXML nodes
 - **Post-processing**: Normalizes zero-dimension group extents (PptxGenJS quirk)
 - **Output**: Fully editable vector-based PowerPoint (not images)

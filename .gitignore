@@ -5,3 +5,5 @@ dist/*.PPTX
 *.pptx
 *.PPTX
 artifacts/slides/*.pptx
+output/
+MA_Theme_extracted/
