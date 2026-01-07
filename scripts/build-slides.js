@@ -107,6 +107,12 @@ const clamp = (value, min, max) => {
 const pxToIn = (px) => Number((clamp(px, 0, 5000) / PX_PER_IN).toFixed(4));
 const pxToPt = (px) => Number(clamp((px * 72) / 96, 8, 64).toFixed(2));
 
+// Convert pixel radius to inches for pptxgenjs rectRadius property
+const pxRadiusToIn = (px) => Number((clamp(px, 0, 200) / PX_PER_IN).toFixed(4));
+
+// Convert opacity percentage (0-100) to decimal (0-1) for pptxgenjs shadow opacity
+const opacityToDecimal = (percent) => clamp(percent, 0, 100) / 100;
+
 const asBox = (xPx, yPx, wPx, hPx) => ({
   x: pxToIn(xPx),
   y: pxToIn(yPx),
@@ -188,8 +194,8 @@ const addShell = (slide, layout, pptx) => {
     ...asBox(layout.shell.xPx, layout.shell.yPx, layout.shell.wPx, layout.shell.hPx),
     fill: "f6f9fe",
     line: { color: "dce3ed" },
-    rectRadius: layout.shell.radius,
-    shadow: { type: "outer", opacity: 25, blur: 9, offset: 0.2, angle: 90 },
+    rectRadius: pxRadiusToIn(layout.shell.radius),
+    shadow: { type: "outer", opacity: opacityToDecimal(25), blur: 9, offset: 0.2, angle: 90 },
   });
 };
 
@@ -225,8 +231,8 @@ const addHeader = (slide, pptx, layout) => {
     ...layout.header.badge,
     fill: palette.deepNavy,
     line: { color: palette.deepNavy },
-    rectRadius: 12,
-    shadow: { type: "outer", opacity: 32, blur: 7, offset: 0.18, angle: 90 },
+    rectRadius: pxRadiusToIn(12),
+    shadow: { type: "outer", opacity: opacityToDecimal(32), blur: 7, offset: 0.18, angle: 90 },
   });
 
   slide.addShape(pptx.ShapeType.ellipse, {
@@ -236,7 +242,7 @@ const addHeader = (slide, pptx, layout) => {
     h: pxToIn(12),
     fill: palette.gold,
     line: { color: palette.gold },
-    shadow: { type: "outer", opacity: 30, blur: 6, offset: 0.05, angle: 90 },
+    shadow: { type: "outer", opacity: opacityToDecimal(30), blur: 6, offset: 0.05, angle: 90 },
   });
 
   slide.addText("Q4 FY24 → Q1 FY26", {
@@ -263,7 +269,7 @@ const addMetrics = (slide, pptx, xPx, yPx, widthPx, metrics) => {
       ...asBox(metricX, yPx, metricWidthPx, metricHeightPx),
       fill: palette.softGray,
       line: { color: "e1e7ee" },
-      rectRadius: 12,
+      rectRadius: pxRadiusToIn(12),
     });
 
     slide.addText(metric.label.toUpperCase(), {
@@ -297,7 +303,7 @@ const addBulletList = (slide, pptx, xPx, startYPx, availableWidthPx, bullets) =>
       h: pxToIn(10),
       fill: palette.gold,
       line: { color: palette.gold },
-      shadow: { type: "outer", opacity: 26, blur: 5, offset: 0.06, angle: 90 },
+      shadow: { type: "outer", opacity: opacityToDecimal(26), blur: 5, offset: 0.06, angle: 90 },
     });
 
     slide.addText(item.title, {
@@ -326,8 +332,8 @@ const addScenarioCard = (slide, pptx, xPx, cardWidthPx, scenario, layout) => {
     ...asBox(xPx, yPx, cardWidthPx, layout.cards.heightPx),
     fill: "FFFFFF",
     line: { color: "dde5ef" },
-    rectRadius: 14,
-    shadow: { type: "outer", opacity: 16, blur: 7, offset: 0.14, angle: 90 },
+    rectRadius: pxRadiusToIn(14),
+    shadow: { type: "outer", opacity: opacityToDecimal(16), blur: 7, offset: 0.14, angle: 90 },
   });
 
   const paddingPx = DESIGN.cardPaddingPx;
@@ -345,7 +351,7 @@ const addScenarioCard = (slide, pptx, xPx, cardWidthPx, scenario, layout) => {
     ...asBox(xPx + paddingPx, yPx + paddingPx + 30, 220, 34),
     fill: scenario.pillFill,
     line: { color: scenario.pillFill },
-    rectRadius: 20,
+    rectRadius: pxRadiusToIn(20),
   });
 
   slide.addText(scenario.pill, {
@@ -375,15 +381,15 @@ const addAsk = (slide, pptx, askLayout) => {
     ...asBox(askLayout.xPx, askLayout.yPx, askLayout.wPx, askLayout.hPx),
     fill: palette.deepNavy,
     line: { color: palette.deepNavy },
-    rectRadius: 14,
-    shadow: { type: "outer", opacity: 22, blur: 7, offset: 0.16, angle: 90 },
+    rectRadius: pxRadiusToIn(14),
+    shadow: { type: "outer", opacity: opacityToDecimal(22), blur: 7, offset: 0.16, angle: 90 },
   });
 
   slide.addShape(pptx.ShapeType.roundRect, {
     ...asBox(askLayout.xPx + 16, askLayout.yPx + 14, 48, 48),
     fill: { color: "FFFFFF", transparency: 78 },
     line: { color: "FFFFFF", transparency: 78 },
-    rectRadius: 12,
+    rectRadius: pxRadiusToIn(12),
   });
 
   slide.addText("★", {
@@ -416,8 +422,8 @@ const addAsk = (slide, pptx, askLayout) => {
     ...asBox(askLayout.xPx + askLayout.wPx - 210, askLayout.yPx + 16, 194, 46),
     fill: palette.gold,
     line: { color: palette.gold },
-    rectRadius: 12,
-    shadow: { type: "outer", opacity: 32, blur: 7, offset: 0.2, angle: 90 },
+    rectRadius: pxRadiusToIn(12),
+    shadow: { type: "outer", opacity: opacityToDecimal(32), blur: 7, offset: 0.2, angle: 90 },
   });
 
   slide.addText("Proceed with Preferred Plan", {
