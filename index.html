@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resource Strategy Outlook</title>
+  <title>From Pilot to Production: Industrialising AI in a Central Bank</title>
   <style>
     :root {
       --deep-navy: #0f2439;
@@ -14,7 +14,7 @@
       --text: #0c1b2a;
       --muted: #4a5c70;
       --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-      --radius: 14px;
+      --radius: 16px;
     }
 
     * {
@@ -34,6 +34,11 @@
       justify-content: center;
       min-height: 100vh;
       padding: 32px;
+    }
+
+    .deck {
+      display: grid;
+      gap: 32px;
     }
 
     .slide {
@@ -64,6 +69,7 @@
       align-items: center;
       position: relative;
       z-index: 1;
+      gap: 16px;
     }
 
     .title-block {
@@ -80,7 +86,7 @@
     }
 
     h1 {
-      font-size: 32px;
+      font-size: 30px;
       color: var(--deep-navy);
       line-height: 1.3;
     }
@@ -113,10 +119,14 @@
 
     .content {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.2fr 0.8fr;
       gap: 18px;
       position: relative;
       z-index: 1;
+    }
+
+    .content.split {
+      grid-template-columns: 1fr 1fr;
     }
 
     .card {
@@ -142,20 +152,12 @@
       align-items: center;
       gap: 8px;
       border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 13px;
+      padding: 6px 12px;
+      font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.02em;
-    }
-
-    .pill.baseline {
       background: #f2f6fb;
       color: var(--mid-navy);
-    }
-
-    .pill.more {
-      background: #fdf6e8;
-      color: #6f5316;
     }
 
     .metrics {
@@ -172,7 +174,7 @@
     }
 
     .metric .label {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       letter-spacing: 0.03em;
       text-transform: uppercase;
@@ -181,7 +183,7 @@
     }
 
     .metric .value {
-      font-size: 20px;
+      font-size: 17px;
       color: var(--deep-navy);
       font-weight: 700;
     }
@@ -215,7 +217,7 @@
 
     .list-item p {
       color: var(--muted);
-      font-size: 14px;
+      font-size: 13.5px;
       line-height: 1.5;
     }
 
@@ -260,127 +262,269 @@
       border-radius: 10px;
       font-weight: 700;
       box-shadow: 0 10px 20px rgba(225, 180, 76, 0.35);
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      letter-spacing: 0.02em;
     }
 
-    .ask .cta:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 24px rgba(225, 180, 76, 0.4);
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-step {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f7f9fc;
+      border: 1px solid #e1e7ee;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--mid-navy);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .timeline-step h4 {
+      font-size: 14px;
+      color: var(--deep-navy);
+      margin-bottom: 4px;
+    }
+
+    .timeline-step p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
     }
   </style>
 </head>
 <body>
-  <main class="slide" aria-label="Resource strategy outlook slide">
-    <header class="header">
-      <div class="title-block">
-        <div class="eyebrow">18-Month Outlook · Resource Strategy</div>
-        <h1>Baseline vs. Accelerated Delivery</h1>
-        <p class="subtitle">How resourcing choices shape delivery outcomes and policy readiness.</p>
-      </div>
-      <div class="badge" aria-label="Timeframe indicator">
-        <span class="dot" aria-hidden="true"></span>
-        <span>Q4 FY24 → Q1 FY26</span>
-      </div>
-    </header>
+  <main class="deck" aria-label="Central bank AI industrialisation slides">
+    <section class="slide" aria-label="From pilot to production overview">
+      <header class="header">
+        <div class="title-block">
+          <div class="eyebrow">Central Bank AI Strategy · Executive Briefing</div>
+          <h1>From Pilot to Production: What Really Takes to Industrialise AI</h1>
+          <p class="subtitle">Building trusted, resilient, and mission-ready AI across policy, supervision, and operations.</p>
+        </div>
+        <div class="badge" aria-label="Presentation theme">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Strategic Priorities 2024–2026</span>
+        </div>
+      </header>
 
-    <section class="content" aria-label="Resource scenarios and outcomes">
-      <article class="card" aria-label="Baseline resource profile">
-        <h2>
-          Baseline Resourcing
-          <span class="pill baseline" aria-label="Baseline capacity indicator">4 FTE · BAU + Incremental Change</span>
-        </h2>
-        <div class="metrics" aria-label="Baseline metrics">
-          <div class="metric">
-            <div class="label">Capacity</div>
-            <div class="value">~60%</div>
-          </div>
-          <div class="metric">
-            <div class="label">Change bandwidth</div>
-            <div class="value">2 tracks</div>
-          </div>
-          <div class="metric">
-            <div class="label">Risk posture</div>
-            <div class="value">Moderate</div>
-          </div>
-        </div>
-        <div class="list" aria-label="Baseline outcomes">
-          <div class="list-item">
-            <div class="bullet" aria-hidden="true"></div>
-            <div>
-              <h3>Maintain core operations</h3>
-              <p>Focus on stability and regulatory reporting; limited innovation bandwidth.</p>
+      <section class="content" aria-label="Use cases and readiness">
+        <article class="card" aria-label="Priority AI use cases">
+          <h2>
+            Priority Use Cases
+            <span class="pill">Policy, Supervision, Markets</span>
+          </h2>
+          <div class="metrics" aria-label="Use case impact">
+            <div class="metric">
+              <div class="label">Policy Insight</div>
+              <div class="value">Forecasting & Scenario Design</div>
+            </div>
+            <div class="metric">
+              <div class="label">Supervisory Reach</div>
+              <div class="value">Early Warning Signals</div>
+            </div>
+            <div class="metric">
+              <div class="label">Operations</div>
+              <div class="value">Automation at Scale</div>
             </div>
           </div>
-          <div class="list-item">
-            <div class="bullet" aria-hidden="true"></div>
-            <div>
-              <h3>Sequential delivery</h3>
-              <p>Two initiative tracks in sequence; elongates policy pilots and analytics upgrades.</p>
+          <div class="list" aria-label="Use case details">
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Macro-financial intelligence</h3>
+                <p>Systemic risk detection, climate stress testing, and liquidity monitoring at decision speed.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Market operations & reserves</h3>
+                <p>Smarter collateral optimization, anomaly detection, and portfolio analytics.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Institutional productivity</h3>
+                <p>Secure copilots for drafting, translation, regulatory reporting, and knowledge search.</p>
+              </div>
             </div>
           </div>
-          <div class="list-item">
-            <div class="bullet" aria-hidden="true"></div>
-            <div>
-              <h3>Deferred optimization</h3>
-              <p>Automation and resilience improvements shift beyond the 18-month window.</p>
-            </div>
-          </div>
-        </div>
-      </article>
+        </article>
 
-      <article class="card" aria-label="Accelerated resource profile">
-        <h2>
-          More Resource (Preferred)
-          <span class="pill more" aria-label="Expanded capacity indicator">+3 FTE · Data, Ops, Delivery</span>
-        </h2>
-        <div class="metrics" aria-label="Accelerated metrics">
-          <div class="metric">
-            <div class="label">Capacity</div>
-            <div class="value">~90%</div>
+        <article class="card" aria-label="Conditions for scale">
+          <h2>
+            Conditions for Scale
+            <span class="pill">Risk, Data, Talent</span>
+          </h2>
+          <div class="list" aria-label="Scale conditions">
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Trusted data foundation</h3>
+                <p>Golden sources, lineage, and access controls aligned with supervisory confidentiality.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Model risk governance</h3>
+                <p>Validated performance, explainability, and human oversight for every release.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Industrial-grade MLOps</h3>
+                <p>Secure deployment, monitoring, and resilience consistent with critical infrastructure.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Skills & operating model</h3>
+                <p>Product owners, data stewards, and model validators embedded in every mission line.</p>
+              </div>
+            </div>
           </div>
-          <div class="metric">
-            <div class="label">Change bandwidth</div>
-            <div class="value">4 tracks</div>
-          </div>
-          <div class="metric">
-            <div class="label">Risk posture</div>
-            <div class="value">Lower</div>
-          </div>
+        </article>
+      </section>
+
+      <section class="ask" aria-label="Executive priority">
+        <div class="icon" aria-hidden="true">◆</div>
+        <div class="text">
+          <h3>Executive Priority</h3>
+          <p>Shift from pilot enthusiasm to production discipline: institutionalize governance, invest in data, and scale responsibly.</p>
         </div>
-        <div class="list" aria-label="Accelerated outcomes">
-          <div class="list-item">
-            <div class="bullet" aria-hidden="true"></div>
-            <div>
-              <h3>Parallel delivery</h3>
-              <p>Run concurrent workstreams (policy pilots, data modernization, resiliency uplift) without sacrificing BAU.</p>
-            </div>
-          </div>
-          <div class="list-item">
-            <div class="bullet" aria-hidden="true"></div>
-            <div>
-              <h3>Faster regulatory readiness</h3>
-              <p>Expedite compliance changes and scenario testing with embedded risk & controls support.</p>
-            </div>
-          </div>
-          <div class="list-item">
-            <div class="bullet" aria-hidden="true"></div>
-            <div>
-              <h3>Data & automation gains</h3>
-              <p>Deliver prioritized automations, observability, and analytics that reduce manual effort and downtime.</p>
-            </div>
-          </div>
-        </div>
-      </article>
+        <div class="cta" aria-label="Institutional mandate">Institutional Mandate</div>
+      </section>
     </section>
 
-    <section class="ask" aria-label="Executive ask">
-      <div class="icon" aria-hidden="true">★</div>
-      <div class="text">
-        <h3>Our ask: Approve +3 FTE for 18 months</h3>
-        <p>Enables four concurrent tracks, accelerates policy pilots, and reduces operational risk while safeguarding BAU.</p>
-      </div>
-      <button class="cta" aria-label="Proceed with preferred option">Proceed with Preferred Plan</button>
+    <section class="slide" aria-label="AI lifecycle and democratization">
+      <header class="header">
+        <div class="title-block">
+          <div class="eyebrow">Lifecycle & Governance</div>
+          <h1>Lifecycle Discipline and Democratized Innovation</h1>
+          <p class="subtitle">A repeatable delivery model that protects public trust while accelerating impact.</p>
+        </div>
+        <div class="badge" aria-label="Lifecycle focus">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Policy-Compliant AI</span>
+        </div>
+      </header>
+
+      <section class="content split" aria-label="Lifecycle and democratization">
+        <article class="card" aria-label="AI lifecycle">
+          <h2>
+            End-to-End AI Lifecycle
+            <span class="pill">Governance Embedded</span>
+          </h2>
+          <div class="timeline" aria-label="Lifecycle steps">
+            <div class="timeline-step">
+              <div class="step-number">01</div>
+              <div>
+                <h4>Use-case qualification</h4>
+                <p>Strategic alignment, legal basis, and data availability confirmed before funding.</p>
+              </div>
+            </div>
+            <div class="timeline-step">
+              <div class="step-number">02</div>
+              <div>
+                <h4>Design & validation</h4>
+                <p>Model risk assessments, bias testing, and stakeholder sign-offs built into design.</p>
+              </div>
+            </div>
+            <div class="timeline-step">
+              <div class="step-number">03</div>
+              <div>
+                <h4>Secure deployment</h4>
+                <p>Controlled release, audit logging, and monitoring aligned with cyber standards.</p>
+              </div>
+            </div>
+            <div class="timeline-step">
+              <div class="step-number">04</div>
+              <div>
+                <h4>Operations & audit</h4>
+                <p>Continuous performance, drift, and compliance reporting to governance forums.</p>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" aria-label="Democratization">
+          <h2>
+            Democratizing AI Innovation
+            <span class="pill">Safely Scaled</span>
+          </h2>
+          <div class="list" aria-label="Democratization initiatives">
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Federated innovation hubs</h3>
+                <p>Domain squads co-create solutions with the AI center of excellence.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Reusable platforms & APIs</h3>
+                <p>Shared data products, model libraries, and secure sandbox environments.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Capability uplift</h3>
+                <p>Executive training, analyst academies, and certified model risk training.</p>
+              </div>
+            </div>
+            <div class="list-item">
+              <div class="bullet" aria-hidden="true"></div>
+              <div>
+                <h3>Governed experimentation</h3>
+                <p>Innovation challenges with pre-approved datasets and ethics reviews.</p>
+              </div>
+            </div>
+          </div>
+          <div class="metrics" aria-label="Democratization outcomes">
+            <div class="metric">
+              <div class="label">Time-to-Value</div>
+              <div class="value">30% Faster Delivery</div>
+            </div>
+            <div class="metric">
+              <div class="label">Adoption</div>
+              <div class="value">Enterprise-Wide</div>
+            </div>
+            <div class="metric">
+              <div class="label">Trust</div>
+              <div class="value">Audit-Ready</div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="ask" aria-label="Strategic close">
+        <div class="icon" aria-hidden="true">✦</div>
+        <div class="text">
+          <h3>Strategic Close</h3>
+          <p>Industrialising AI means embedding governance, empowering talent, and delivering measurable outcomes in every mandate.</p>
+        </div>
+        <div class="cta" aria-label="Commitment">Institutional Commitment</div>
+      </section>
     </section>
   </main>
 </body>
