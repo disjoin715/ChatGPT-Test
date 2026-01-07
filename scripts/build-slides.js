@@ -3,24 +3,24 @@ const path = require("path");
 const PptxGenJS = require("pptxgenjs");
 const JSZip = require("jszip");
 
+// Slide dimensions
 const SLIDE = { widthIn: 10, heightIn: 5.625 };
+const PX_PER_IN = 128; // 1280px / 10in
+
+// Design constants (in pixels, matching HTML)
 const DESIGN = {
   widthPx: 1280,
   heightPx: 720,
   shellMarginXPx: 28,
   shellMarginYPx: 24,
-  paddingXPx: 30,
-  paddingYPx: 26,
-  columnGapPx: 18,
-  verticalGapPx: 18,
-  headerHeightPx: 118,
-  askHeightPx: 96,
-  cardPaddingPx: 22,
-  metricGapPx: 10,
-  listGapPx: 52,
+  paddingXPx: 44,
+  paddingYPx: 40,
+  columnGapPx: 20,
+  verticalGapPx: 26,
+  headerHeightPx: 100,
+  askHeightPx: 76,
+  cardPaddingPx: 24,
 };
-
-const PX_PER_IN = DESIGN.widthPx / SLIDE.widthIn;
 
 const palette = {
   deepNavy: "0F2439",
@@ -30,12 +30,8 @@ const palette = {
   softGray: "f4f6f8",
   text: "0c1b2a",
   muted: "4a5c70",
-};
-
-const sharedText = {
-  fontFace: "Segoe UI",
-  fontSize: 12,
-  color: palette.text,
+  white: "FFFFFF",
+  cardBorder: "dde5ef",
 };
 
 const scenarios = [
@@ -45,25 +41,22 @@ const scenarios = [
     pillFill: "f2f6fb",
     pillColor: palette.midNavy,
     metrics: [
-      { label: "Capacity", value: "~60%" },
-      { label: "Change bandwidth", value: "2 tracks" },
-      { label: "Risk posture", value: "Moderate" },
+      { label: "CAPACITY", value: "~60%" },
+      { label: "CHANGE BANDWIDTH", value: "2 tracks" },
+      { label: "RISK EXPOSURE", value: "Moderate" },
     ],
     bullets: [
       {
         title: "Maintain core operations",
-        detail:
-          "Focus on stability and regulatory reporting; limited innovation bandwidth.",
+        detail: "Focus on stability and regulatory reporting; limited innovation bandwidth.",
       },
       {
         title: "Sequential delivery",
-        detail:
-          "Two initiative tracks in sequence; elongates policy pilots and analytics upgrades.",
+        detail: "Two initiative tracks in sequence; elongates policy pilots and analytics upgrades.",
       },
       {
         title: "Deferred optimization",
-        detail:
-          "Automation and resilience improvements shift beyond the 18-month window.",
+        detail: "Automation and resilience improvements shift beyond the 18-month window.",
       },
     ],
   },
@@ -73,60 +66,45 @@ const scenarios = [
     pillFill: "fdf6e8",
     pillColor: "6f5316",
     metrics: [
-      { label: "Capacity", value: "~90%" },
-      { label: "Change bandwidth", value: "4 tracks" },
-      { label: "Risk posture", value: "Lower" },
+      { label: "CAPACITY", value: "~90%" },
+      { label: "CHANGE BANDWIDTH", value: "4 tracks" },
+      { label: "RISK EXPOSURE", value: "Lower" },
     ],
     bullets: [
       {
         title: "Parallel delivery",
-        detail:
-          "Run concurrent workstreams (policy pilots, data modernization, resiliency uplift) without sacrificing BAU.",
+        detail: "Run concurrent workstreams (policy pilots, data modernization, resiliency uplift) without sacrificing BAU.",
       },
       {
         title: "Faster regulatory readiness",
-        detail:
-          "Expedite compliance changes and scenario testing with embedded risk & controls support.",
+        detail: "Expedite compliance changes and scenario testing with embedded risk & controls support.",
       },
       {
         title: "Data & automation gains",
-        detail:
-          "Deliver prioritized automations, observability, and analytics that reduce manual effort and downtime.",
+        detail: "Deliver prioritized automations, observability, and analytics that reduce manual effort and downtime.",
       },
     ],
   },
 ];
 
-const clamp = (value, min, max) => {
-  if (!Number.isFinite(value)) return min;
-  if (typeof min === "number") value = Math.max(min, value);
-  if (typeof max === "number") value = Math.min(max, value);
-  return value;
-};
-
-const pxToIn = (px) => Number((clamp(px, 0, 5000) / PX_PER_IN).toFixed(4));
-const pxToPt = (px) => Number(clamp((px * 72) / 96, 8, 64).toFixed(2));
-
-// Convert pixel radius to inches for pptxgenjs rectRadius property
-const pxRadiusToIn = (px) => Number((clamp(px, 0, 200) / PX_PER_IN).toFixed(4));
-
-// Convert opacity percentage (0-100) to decimal (0-1) for pptxgenjs shadow opacity
-const opacityToDecimal = (percent) => clamp(percent, 0, 100) / 100;
+// Helper functions
+const pxToIn = (px) => px / PX_PER_IN;
+const pxToPt = (px) => (px * 72) / 96;
 
 const asBox = (xPx, yPx, wPx, hPx) => ({
   x: pxToIn(xPx),
   y: pxToIn(yPx),
-  w: pxToIn(Math.max(wPx, 4)),
-  h: pxToIn(Math.max(hPx, 4)),
+  w: pxToIn(Math.max(wPx, 1)),
+  h: pxToIn(Math.max(hPx, 1)),
 });
 
+// Compute layout positions
 const computeLayout = () => {
   const shell = {
     xPx: DESIGN.shellMarginXPx,
     yPx: DESIGN.shellMarginYPx,
     wPx: DESIGN.widthPx - DESIGN.shellMarginXPx * 2,
     hPx: DESIGN.heightPx - DESIGN.shellMarginYPx * 2,
-    radius: 22,
   };
 
   const content = {
@@ -136,346 +114,339 @@ const computeLayout = () => {
     hPx: shell.hPx - DESIGN.paddingYPx * 2,
   };
 
-  const cardsHeightPx =
-    content.hPx - DESIGN.headerHeightPx - DESIGN.askHeightPx - DESIGN.verticalGapPx * 2;
+  // Cards take remaining space after header and ask bar
+  const cardsHeightPx = content.hPx - DESIGN.headerHeightPx - DESIGN.askHeightPx - DESIGN.verticalGapPx * 2;
 
-  const leftWidthPx =
-    (content.wPx - DESIGN.columnGapPx) * (1.1 / (1.1 + 0.9));
-  const rightWidthPx =
-    (content.wPx - DESIGN.columnGapPx) * (0.9 / (1.1 + 0.9));
+  // Equal width cards
+  const cardWidthPx = (content.wPx - DESIGN.columnGapPx) / 2;
 
   return {
     shell,
     content,
     header: {
-      eyebrowBox: {
-        ...asBox(content.xPx, content.yPx, content.wPx * 0.7, 24),
-      },
-      titleBox: {
-        ...asBox(content.xPx, content.yPx + 26, content.wPx * 0.72, 44),
-      },
-      subtitleBox: {
-        ...asBox(content.xPx, content.yPx + 70, content.wPx * 0.7, 28),
-      },
-      badge: {
-        ...asBox(
-          content.xPx + content.wPx - 220,
-          content.yPx + 6,
-          220,
-          52
-        ),
-        radius: 12,
-      },
+      titleBox: asBox(content.xPx, content.yPx, content.wPx * 0.72, 42),
+      subtitleBox: asBox(content.xPx, content.yPx + 48, content.wPx * 0.7, 24),
+      badgeBox: asBox(content.xPx + content.wPx - 180, content.yPx, 180, 42),
     },
     cards: {
-      yPx: content.yPx + DESIGN.headerHeightPx + DESIGN.verticalGapPx,
+      yPx: content.yPx + DESIGN.headerHeightPx,
       heightPx: cardsHeightPx,
-      leftWidthPx,
-      rightWidthPx,
+      widthPx: cardWidthPx,
+      leftXPx: content.xPx,
+      rightXPx: content.xPx + cardWidthPx + DESIGN.columnGapPx,
     },
     ask: {
       xPx: content.xPx,
-      yPx:
-        content.yPx +
-        DESIGN.headerHeightPx +
-        DESIGN.verticalGapPx +
-        cardsHeightPx +
-        DESIGN.verticalGapPx,
+      yPx: content.yPx + DESIGN.headerHeightPx + cardsHeightPx + DESIGN.verticalGapPx,
       wPx: content.wPx,
       hPx: DESIGN.askHeightPx,
     },
   };
 };
 
+// Add the slide background shell
 const addShell = (slide, layout, pptx) => {
   slide.background = { color: palette.deepNavy };
 
+  // Main rounded rectangle (slide background)
   slide.addShape(pptx.ShapeType.roundRect, {
     ...asBox(layout.shell.xPx, layout.shell.yPx, layout.shell.wPx, layout.shell.hPx),
-    fill: "f6f9fe",
-    line: { color: "dce3ed" },
-    rectRadius: pxRadiusToIn(layout.shell.radius),
-    shadow: { type: "outer", opacity: opacityToDecimal(25), blur: 9, offset: 0.2, angle: 90 },
+    fill: { color: "f9fbff" },
+    line: { color: "dce3ed", pt: 1 },
+    rectRadius: 0.2,
   });
 };
 
+// Add header section
 const addHeader = (slide, pptx, layout) => {
-  slide.addText("18-Month Outlook · Resource Strategy", {
-    ...sharedText,
-    ...layout.header.eyebrowBox,
-    fontSize: pxToPt(14),
-    color: palette.muted,
-    bold: true,
-    charSpacing: 120,
-  });
-
+  // Title
   slide.addText("Baseline vs. Accelerated Delivery", {
-    ...sharedText,
     ...layout.header.titleBox,
-    fontSize: pxToPt(32),
+    fontFace: "Segoe UI",
+    fontSize: 34,
     color: palette.deepNavy,
     bold: true,
+    valign: "top",
   });
 
-  slide.addText(
-    "How resourcing choices shape delivery outcomes and policy readiness.",
-    {
-      ...sharedText,
-      ...layout.header.subtitleBox,
-      fontSize: pxToPt(16),
-      color: palette.muted,
-    }
-  );
+  // Subtitle
+  slide.addText("How resourcing choices shape delivery outcomes and policy readiness.", {
+    ...layout.header.subtitleBox,
+    fontFace: "Segoe UI",
+    fontSize: 17,
+    color: palette.muted,
+    valign: "top",
+  });
 
+  // Badge background
   slide.addShape(pptx.ShapeType.roundRect, {
-    ...layout.header.badge,
-    fill: palette.deepNavy,
-    line: { color: palette.deepNavy },
-    rectRadius: pxRadiusToIn(12),
-    shadow: { type: "outer", opacity: opacityToDecimal(32), blur: 7, offset: 0.18, angle: 90 },
+    ...layout.header.badgeBox,
+    fill: { color: palette.deepNavy },
+    rectRadius: 0.15,
   });
 
+  // Badge dot
   slide.addShape(pptx.ShapeType.ellipse, {
-    x: layout.header.badge.x + pxToIn(12),
-    y: layout.header.badge.y + pxToIn(15),
-    w: pxToIn(12),
-    h: pxToIn(12),
-    fill: palette.gold,
-    line: { color: palette.gold },
-    shadow: { type: "outer", opacity: opacityToDecimal(30), blur: 6, offset: 0.05, angle: 90 },
+    x: layout.header.badgeBox.x + 0.1,
+    y: layout.header.badgeBox.y + 0.12,
+    w: 0.1,
+    h: 0.1,
+    fill: { color: palette.gold },
   });
 
+  // Badge text
   slide.addText("Q4 FY24 → Q1 FY26", {
-    ...sharedText,
-    x: layout.header.badge.x + pxToIn(30),
-    y: layout.header.badge.y + pxToIn(14),
-    w: layout.header.badge.w - pxToIn(40),
-    h: pxToIn(26),
-    fontSize: pxToPt(14),
-    color: "FFFFFF",
+    x: layout.header.badgeBox.x + 0.25,
+    y: layout.header.badgeBox.y,
+    w: layout.header.badgeBox.w - 0.3,
+    h: layout.header.badgeBox.h,
+    fontFace: "Segoe UI",
+    fontSize: 13,
+    color: palette.white,
     bold: true,
+    valign: "middle",
   });
 };
 
-const addMetrics = (slide, pptx, xPx, yPx, widthPx, metrics) => {
-  const metricGapPx = DESIGN.metricGapPx;
-  const metricHeightPx = 96;
-  const metricWidthPx =
-    (widthPx - metricGapPx * 2) / 3;
+// Add a scenario card
+const addScenarioCard = (slide, pptx, xPx, yPx, widthPx, heightPx, scenario) => {
+  const padding = DESIGN.cardPaddingPx;
+  const innerWidth = widthPx - padding * 2;
 
-  metrics.forEach((metric, idx) => {
-    const metricX = xPx + idx * (metricWidthPx + metricGapPx);
-    slide.addShape(pptx.ShapeType.roundRect, {
-      ...asBox(metricX, yPx, metricWidthPx, metricHeightPx),
-      fill: palette.softGray,
-      line: { color: "e1e7ee" },
-      rectRadius: pxRadiusToIn(12),
-    });
-
-    slide.addText(metric.label.toUpperCase(), {
-      ...sharedText,
-      ...asBox(metricX + 12, yPx + 12, metricWidthPx - 24, 18),
-      fontSize: pxToPt(12),
-      color: palette.muted,
-      bold: true,
-      charSpacing: 40,
-    });
-
-    slide.addText(metric.value, {
-      ...sharedText,
-      ...asBox(metricX + 12, yPx + 38, metricWidthPx - 24, 36),
-      fontSize: pxToPt(20),
-      color: palette.deepNavy,
-      bold: true,
-    });
-  });
-};
-
-const addBulletList = (slide, pptx, xPx, startYPx, availableWidthPx, bullets) => {
-  let currentY = startYPx;
-  const lineHeightPx = 54;
-
-  bullets.forEach((item) => {
-    slide.addShape(pptx.ShapeType.ellipse, {
-      x: pxToIn(xPx),
-      y: pxToIn(currentY + 6),
-      w: pxToIn(10),
-      h: pxToIn(10),
-      fill: palette.gold,
-      line: { color: palette.gold },
-      shadow: { type: "outer", opacity: opacityToDecimal(26), blur: 5, offset: 0.06, angle: 90 },
-    });
-
-    slide.addText(item.title, {
-      ...sharedText,
-      ...asBox(xPx + 18, currentY, availableWidthPx - 18, 22),
-      fontSize: pxToPt(15),
-      color: palette.deepNavy,
-      bold: true,
-    });
-
-    slide.addText(item.detail, {
-      ...sharedText,
-      ...asBox(xPx + 18, currentY + 18, availableWidthPx - 18, 40),
-      fontSize: pxToPt(13),
-      color: palette.muted,
-    });
-
-    currentY += lineHeightPx;
-  });
-};
-
-const addScenarioCard = (slide, pptx, xPx, cardWidthPx, scenario, layout) => {
-  const yPx = layout.cards.yPx;
-
+  // Card background
   slide.addShape(pptx.ShapeType.roundRect, {
-    ...asBox(xPx, yPx, cardWidthPx, layout.cards.heightPx),
-    fill: "FFFFFF",
-    line: { color: "dde5ef" },
-    rectRadius: pxRadiusToIn(14),
-    shadow: { type: "outer", opacity: opacityToDecimal(16), blur: 7, offset: 0.14, angle: 90 },
+    ...asBox(xPx, yPx, widthPx, heightPx),
+    fill: { color: palette.white },
+    line: { color: palette.cardBorder, pt: 1 },
+    rectRadius: 0.15,
   });
 
-  const paddingPx = DESIGN.cardPaddingPx;
-  const textWidthPx = cardWidthPx - paddingPx * 2;
+  let currentY = yPx + padding;
 
+  // Card title
   slide.addText(scenario.title, {
-    ...sharedText,
-    ...asBox(xPx + paddingPx, yPx + paddingPx, textWidthPx, 26),
-    fontSize: pxToPt(18),
+    ...asBox(xPx + padding, currentY, innerWidth, 24),
+    fontFace: "Segoe UI",
+    fontSize: 18,
     color: palette.deepNavy,
     bold: true,
+    valign: "top",
   });
+  currentY += 28;
 
+  // Pill
+  const pillWidth = 200;
+  const pillHeight = 28;
   slide.addShape(pptx.ShapeType.roundRect, {
-    ...asBox(xPx + paddingPx, yPx + paddingPx + 30, 220, 34),
-    fill: scenario.pillFill,
-    line: { color: scenario.pillFill },
-    rectRadius: pxRadiusToIn(20),
+    ...asBox(xPx + padding, currentY, pillWidth, pillHeight),
+    fill: { color: scenario.pillFill },
+    rectRadius: 0.3,
   });
 
   slide.addText(scenario.pill, {
-    ...sharedText,
-    ...asBox(xPx + paddingPx + 12, yPx + paddingPx + 34, 200, 24),
-    fontSize: pxToPt(12),
+    ...asBox(xPx + padding + 10, currentY, pillWidth - 20, pillHeight),
+    fontFace: "Segoe UI",
+    fontSize: 11,
     color: scenario.pillColor,
     bold: true,
+    valign: "middle",
   });
+  currentY += pillHeight + 16;
 
-  const metricsY = yPx + paddingPx + 68;
-  addMetrics(slide, pptx, xPx + paddingPx, metricsY, textWidthPx, scenario.metrics);
+  // Metrics row
+  const metricGap = 12;
+  const metricWidth = (innerWidth - metricGap * 2) / 3;
+  const metricHeight = 80;
 
-  const listStartY = metricsY + 112;
-  addBulletList(
-    slide,
-    pptx,
-    xPx + paddingPx,
-    listStartY,
-    textWidthPx,
-    scenario.bullets
-  );
+  scenario.metrics.forEach((metric, idx) => {
+    const metricX = xPx + padding + idx * (metricWidth + metricGap);
+
+    // Metric box background
+    slide.addShape(pptx.ShapeType.roundRect, {
+      ...asBox(metricX, currentY, metricWidth, metricHeight),
+      fill: { color: palette.softGray },
+      line: { color: "e1e7ee", pt: 1 },
+      rectRadius: 0.12,
+    });
+
+    // Label at top (smaller, uppercase)
+    slide.addText(metric.label, {
+      ...asBox(metricX + 8, currentY + 8, metricWidth - 16, 16),
+      fontFace: "Segoe UI",
+      fontSize: 9,
+      color: palette.muted,
+      bold: true,
+      valign: "top",
+    });
+
+    // Value (large, centered)
+    slide.addText(metric.value, {
+      ...asBox(metricX + 8, currentY + 28, metricWidth - 16, 44),
+      fontFace: "Segoe UI",
+      fontSize: 22,
+      color: palette.deepNavy,
+      bold: true,
+      valign: "middle",
+    });
+  });
+  currentY += metricHeight + 18;
+
+  // Bullet points
+  const bulletSpacing = 54;
+
+  scenario.bullets.forEach((item) => {
+    // Bullet dot
+    slide.addShape(pptx.ShapeType.ellipse, {
+      ...asBox(xPx + padding, currentY + 5, 10, 10),
+      fill: { color: palette.gold },
+    });
+
+    // Bullet title
+    slide.addText(item.title, {
+      ...asBox(xPx + padding + 18, currentY, innerWidth - 18, 18),
+      fontFace: "Segoe UI",
+      fontSize: 13,
+      color: palette.deepNavy,
+      bold: true,
+      valign: "top",
+    });
+
+    // Bullet detail
+    slide.addText(item.detail, {
+      ...asBox(xPx + padding + 18, currentY + 18, innerWidth - 18, 34),
+      fontFace: "Segoe UI",
+      fontSize: 11,
+      color: palette.muted,
+      valign: "top",
+      wrap: true,
+    });
+
+    currentY += bulletSpacing;
+  });
 };
 
+// Add the bottom "ask" bar
 const addAsk = (slide, pptx, askLayout) => {
+  // Ask bar background
   slide.addShape(pptx.ShapeType.roundRect, {
     ...asBox(askLayout.xPx, askLayout.yPx, askLayout.wPx, askLayout.hPx),
-    fill: palette.deepNavy,
-    line: { color: palette.deepNavy },
-    rectRadius: pxRadiusToIn(14),
-    shadow: { type: "outer", opacity: opacityToDecimal(22), blur: 7, offset: 0.16, angle: 90 },
+    fill: { color: palette.deepNavy },
+    rectRadius: 0.15,
   });
 
+  // Star icon container
   slide.addShape(pptx.ShapeType.roundRect, {
     ...asBox(askLayout.xPx + 16, askLayout.yPx + 14, 48, 48),
-    fill: { color: "FFFFFF", transparency: 78 },
-    line: { color: "FFFFFF", transparency: 78 },
-    rectRadius: pxRadiusToIn(12),
+    fill: { color: "2a4a6b" },
+    rectRadius: 0.12,
   });
 
+  // Star character
   slide.addText("★", {
-    ...sharedText,
-    ...asBox(askLayout.xPx + 30, askLayout.yPx + 20, 18, 28),
-    fontSize: pxToPt(24),
-    color: "FFFFFF",
-    bold: true,
+    ...asBox(askLayout.xPx + 16, askLayout.yPx + 14, 48, 48),
+    fontFace: "Segoe UI",
+    fontSize: 22,
+    color: palette.white,
+    align: "center",
+    valign: "middle",
   });
 
+  // Ask title
   slide.addText("Our ask: Approve +3 FTE for 18 months", {
-    ...sharedText,
-    ...asBox(askLayout.xPx + 76, askLayout.yPx + 12, askLayout.wPx * 0.6, 28),
-    fontSize: pxToPt(16),
-    color: "FFFFFF",
+    ...asBox(askLayout.xPx + 80, askLayout.yPx + 14, askLayout.wPx * 0.55, 22),
+    fontFace: "Segoe UI",
+    fontSize: 15,
+    color: palette.white,
     bold: true,
+    valign: "top",
   });
 
+  // Ask subtitle
   slide.addText(
     "Enables four concurrent tracks, accelerates policy pilots, and reduces operational risk while safeguarding BAU.",
     {
-      ...sharedText,
-      ...asBox(askLayout.xPx + 76, askLayout.yPx + 36, askLayout.wPx * 0.6, 28),
-      fontSize: pxToPt(13),
+      ...asBox(askLayout.xPx + 80, askLayout.yPx + 38, askLayout.wPx * 0.55, 28),
+      fontFace: "Segoe UI",
+      fontSize: 11,
       color: "d5e2f2",
+      valign: "top",
+      wrap: true,
     }
   );
 
+  // CTA button
+  const ctaWidth = 160;
+  const ctaHeight = 40;
+  const ctaX = askLayout.xPx + askLayout.wPx - ctaWidth - 20;
+  const ctaY = askLayout.yPx + (askLayout.hPx - ctaHeight) / 2;
+
   slide.addShape(pptx.ShapeType.roundRect, {
-    ...asBox(askLayout.xPx + askLayout.wPx - 210, askLayout.yPx + 16, 194, 46),
-    fill: palette.gold,
-    line: { color: palette.gold },
-    rectRadius: pxRadiusToIn(12),
-    shadow: { type: "outer", opacity: opacityToDecimal(32), blur: 7, offset: 0.2, angle: 90 },
+    ...asBox(ctaX, ctaY, ctaWidth, ctaHeight),
+    fill: { color: palette.gold },
+    rectRadius: 0.12,
   });
 
-  slide.addText("Proceed with Preferred Plan", {
-    ...sharedText,
-    ...asBox(askLayout.xPx + askLayout.wPx - 190, askLayout.yPx + 22, 160, 28),
-    fontSize: pxToPt(12),
+  slide.addText("Proceed with\nPreferred Plan", {
+    ...asBox(ctaX, ctaY, ctaWidth, ctaHeight),
+    fontFace: "Segoe UI",
+    fontSize: 11,
     color: "1f1606",
     bold: true,
+    align: "center",
+    valign: "middle",
   });
 };
 
+// Build the main slide
 const buildSlide = (pptx) => {
   const slide = pptx.addSlide();
   const layout = computeLayout();
 
   addShell(slide, layout, pptx);
   addHeader(slide, pptx, layout);
+
+  // Left card
   addScenarioCard(
     slide,
     pptx,
-    layout.content.xPx,
-    layout.cards.leftWidthPx,
-    scenarios[0],
-    layout
+    layout.cards.leftXPx,
+    layout.cards.yPx,
+    layout.cards.widthPx,
+    layout.cards.heightPx,
+    scenarios[0]
   );
+
+  // Right card
   addScenarioCard(
     slide,
     pptx,
-    layout.content.xPx + layout.cards.leftWidthPx + DESIGN.columnGapPx,
-    layout.cards.rightWidthPx,
-    scenarios[1],
-    layout
+    layout.cards.rightXPx,
+    layout.cards.yPx,
+    layout.cards.widthPx,
+    layout.cards.heightPx,
+    scenarios[1]
   );
+
   addAsk(slide, pptx, layout.ask);
 };
 
+// Create the presentation deck
 const createDeck = () => {
   const pptx = new PptxGenJS();
   pptx.layout = "LAYOUT_16x9";
+  pptx.title = "Baseline vs Accelerated Delivery";
   buildSlide(pptx);
   return pptx;
 };
 
+// Normalize group extents in PPTX XML (fixes rendering issues)
 const normalizeGroupExtents = (xml, cx, cy) => {
-  const replacements = [
-    { pattern: /<a:ext\s+cx="0"\s+cy="0"\s*\/>/g, value: `<a:ext cx="${cx}" cy="${cy}"/>` },
-    { pattern: /<a:chExt\s+cx="0"\s+cy="0"\s*\/>/g, value: `<a:chExt cx="${cx}" cy="${cy}"/>` },
-  ];
-
-  return replacements.reduce((current, { pattern, value }) => current.replace(pattern, value), xml);
+  return xml
+    .replace(/<a:ext\s+cx="0"\s+cy="0"\s*\/>/g, `<a:ext cx="${cx}" cy="${cy}"/>`)
+    .replace(/<a:chExt\s+cx="0"\s+cy="0"\s*\/>/g, `<a:chExt cx="${cx}" cy="${cy}"/>`);
 };
 
+// Write the PPTX with normalized XML
 const writeNormalizedPptx = async (pptx, outputPath) => {
   const nodeBuffer = await pptx.write("nodebuffer");
   const zip = await JSZip.loadAsync(nodeBuffer);
@@ -499,15 +470,15 @@ const writeNormalizedPptx = async (pptx, outputPath) => {
   fs.writeFileSync(outputPath, normalizedBuffer);
 };
 
-async function buildSlides(
-  outputPath = path.join(__dirname, "..", "dist", "deck.pptx")
-) {
+// Main build function
+async function buildSlides(outputPath = path.join(__dirname, "..", "dist", "deck.pptx")) {
   const pptx = createDeck();
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   await writeNormalizedPptx(pptx, outputPath);
   return outputPath;
 }
 
+// Run if called directly
 if (require.main === module) {
   buildSlides()
     .then((output) => console.log(`Presentation created: ${output}`))
