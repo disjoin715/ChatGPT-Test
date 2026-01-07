@@ -4,3 +4,4 @@ dist/*.pptx
 dist/*.PPTX
 *.pptx
 *.PPTX
+artifacts/slides/*.pptx

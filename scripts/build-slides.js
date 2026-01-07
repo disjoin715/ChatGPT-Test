@@ -493,7 +493,9 @@ const writeNormalizedPptx = async (pptx, outputPath) => {
   fs.writeFileSync(outputPath, normalizedBuffer);
 };
 
-async function buildSlides(outputPath = path.join(__dirname, "..", "dist", "deck.pptx")) {
+async function buildSlides(
+  outputPath = path.join(__dirname, "..", "artifacts", "slides", "latest.pptx")
+) {
   const pptx = createDeck();
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
   await writeNormalizedPptx(pptx, outputPath);
