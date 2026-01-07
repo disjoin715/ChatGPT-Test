@@ -25,10 +25,10 @@ jobs:
         run: npm run build:slides
 
       - name: List generated artifacts
-        run: ls -R dist
+        run: ls -R artifacts
 
       - name: Upload PPTX artifact
         uses: actions/upload-artifact@v4
         with:
           name: resource-strategy-slides
-          path: dist/deck.pptx
+          path: artifacts/slides/latest.pptx
