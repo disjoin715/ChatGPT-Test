@@ -170,42 +170,23 @@ const slidesData = [
       badge: "Policy-Compliant AI",
     },
     leftCard: {
-      title: "End-to-End Lifecycle",
-      type: "journey",
+      title: "End-to-End Lifecycle (Visual)",
+      type: "journeyLarge",
       journey: [
-        { step: "01", title: "Qualify", label: "Strategic fit" },
-        { step: "02", title: "Validate", label: "Model risk" },
-        { step: "03", title: "Deploy", label: "Secure release" },
-        { step: "04", title: "Monitor", label: "Audit ready" },
+        { step: "01", title: "Qualify", label: "Strategic fit · data readiness · value & risk sizing" },
+        { step: "02", title: "Validate", label: "Evaluation · model risk · explainability · approvals" },
+        { step: "03", title: "Deploy", label: "Secure release · guardrails · access controls · rollout" },
+        { step: "04", title: "Monitor", label: "Logging · drift · incidents · continuous improvement" },
       ],
       sparkline: [
-        { value: "Governed", label: "By design" },
-        { value: "Secure", label: "Every release" },
-        { value: "Measured", label: "Outcomes" },
+        { value: "Evidence", label: "Audit trail" },
+        { value: "Controls", label: "Guardrails" },
+        { value: "Value", label: "Measured" },
       ],
     },
-    rightCard: {
-      title: "Controls for Production",
-      type: "pills",
-      pills: ["Guardrails", "Evidence", "Oversight"],
-      items: [
-        { icon: "✓", title: "Model validation", detail: "Testing, explainability, and approval checkpoints for material use cases." },
-        { icon: "◍", title: "Access + data controls", detail: "Least privilege, data minimisation, and confidential patterns where needed." },
-        { icon: "⬡", title: "Monitoring + audit trail", detail: "Prompt/output logging, drift detection, and incident playbooks." },
-      ],
-      sparkline: [
-        { value: "Audit", label: "Ready" },
-        { value: "Human", label: "Oversight" },
-        { value: "Measured", label: "Risk" },
-      ],
-    },
-    ask: {
-      icon: "◆",
-      title: "Strategic Close",
-      text: "Lifecycle discipline creates the safety and evidence base needed for scale.",
-      cta: "Scale",
-    },
-    splitColumns: true,
+    splitColumns: false,
+    singleCard: true,
+    showAsk: false,
   },
   {
     header: {
@@ -345,7 +326,7 @@ const asBox = (xPx, yPx, wPx, hPx) => ({
   h: pxToIn(Math.max(hPx, 4)),
 });
 
-const computeLayout = (split = false) => {
+const computeLayout = (split = false, showAsk = true) => {
   const shell = {
     xPx: DESIGN.shellMarginXPx,
     yPx: DESIGN.shellMarginYPx,
@@ -361,8 +342,9 @@ const computeLayout = (split = false) => {
     hPx: shell.hPx - DESIGN.paddingYPx * 2,
   };
 
-  const cardsHeightPx =
-    content.hPx - DESIGN.headerHeightPx - DESIGN.askHeightPx - DESIGN.verticalGapPx * 2;
+  const cardsHeightPx = showAsk
+    ? content.hPx - DESIGN.headerHeightPx - DESIGN.askHeightPx - DESIGN.verticalGapPx * 2
+    : content.hPx - DESIGN.headerHeightPx - DESIGN.verticalGapPx;
 
   let leftWidthPx, rightWidthPx;
   if (split) {
@@ -391,12 +373,19 @@ const computeLayout = (split = false) => {
       leftWidthPx,
       rightWidthPx,
     },
-    ask: {
-      xPx: content.xPx,
-      yPx: content.yPx + DESIGN.headerHeightPx + DESIGN.verticalGapPx + cardsHeightPx + DESIGN.verticalGapPx,
-      wPx: content.wPx,
-      hPx: DESIGN.askHeightPx,
-    },
+    ask: showAsk
+      ? {
+          xPx: content.xPx,
+          yPx:
+            content.yPx +
+            DESIGN.headerHeightPx +
+            DESIGN.verticalGapPx +
+            cardsHeightPx +
+            DESIGN.verticalGapPx,
+          wPx: content.wPx,
+          hPx: DESIGN.askHeightPx,
+        }
+      : null,
   };
 };
 
@@ -637,6 +626,71 @@ const addJourney = (slide, pptx, xPx, yPx, widthPx, journey) => {
   });
 };
 
+const addJourneyLarge = (slide, pptx, xPx, yPx, widthPx, journey) => {
+  const steps = journey.length;
+  const gapPx = 18;
+  const stepWidthPx = (widthPx - gapPx * (steps - 1)) / steps;
+  const stepHeightPx = 140;
+
+  journey.forEach((item, idx) => {
+    const stepX = xPx + idx * (stepWidthPx + gapPx);
+
+    // Step background
+    slide.addShape(pptx.ShapeType.roundRect, {
+      ...asBox(stepX, yPx, stepWidthPx, stepHeightPx),
+      fill: "f7f9fc",
+      line: { color: "e1e7ee", width: 1 },
+      rectRadius: pxRadiusToIn(18),
+    });
+
+    // Step icon
+    slide.addShape(pptx.ShapeType.roundRect, {
+      ...asBox(stepX + 18, yPx + 18, 56, 56),
+      fill: "fdf6e8",
+      line: { color: "fdf6e8" },
+      rectRadius: pxRadiusToIn(18),
+    });
+
+    slide.addText(item.step, {
+      ...sharedText,
+      ...asBox(stepX + 18, yPx + 32, 56, 24),
+      fontSize: pxToPt(16),
+      color: palette.pillColor,
+      bold: true,
+      align: "center",
+    });
+
+    // Step title
+    slide.addText(item.title, {
+      ...sharedText,
+      ...asBox(stepX + 18, yPx + 80, stepWidthPx - 36, 20),
+      fontSize: pxToPt(16),
+      color: palette.deepNavy,
+      bold: true,
+    });
+
+    // Step label
+    slide.addText(item.label, {
+      ...sharedText,
+      ...asBox(stepX + 18, yPx + 104, stepWidthPx - 36, 34),
+      fontSize: pxToPt(13),
+      color: palette.muted,
+    });
+
+    // Connector arrow
+    if (idx < steps - 1) {
+      slide.addText("→", {
+        ...sharedText,
+        ...asBox(stepX + stepWidthPx + gapPx / 2 - 14, yPx + stepHeightPx / 2 - 16, 28, 28),
+        fontSize: pxToPt(26),
+        color: palette.muted,
+        bold: true,
+        align: "center",
+      });
+    }
+  });
+};
+
 const addCard = (slide, pptx, xPx, yPx, widthPx, heightPx, cardData) => {
   // Card background
   slide.addShape(pptx.ShapeType.roundRect, {
@@ -671,6 +725,11 @@ const addCard = (slide, pptx, xPx, yPx, widthPx, heightPx, cardData) => {
   if (cardData.type === "journey" && cardData.journey) {
     addJourney(slide, pptx, xPx + paddingPx, currentY, innerWidthPx, cardData.journey);
     currentY += 104;
+  }
+
+  if (cardData.type === "journeyLarge" && cardData.journey) {
+    addJourneyLarge(slide, pptx, xPx + paddingPx, currentY + 6, innerWidthPx, cardData.journey);
+    currentY += 172;
   }
 
   if (cardData.items && (cardData.type === "iconGrid" || cardData.type === "pills")) {
@@ -750,36 +809,54 @@ const addAsk = (slide, pptx, askLayout, askData) => {
   });
 };
 
-const buildSlide = (pptx, slideData, isSplit = false) => {
+const buildSlide = (pptx, slideData, options = {}) => {
+  const isSplit = options.splitColumns || false;
+  const showAsk = options.showAsk !== false;
+  const singleCard = options.singleCard || !slideData.rightCard;
+
   const slide = pptx.addSlide();
-  const layout = computeLayout(isSplit);
+  const layout = computeLayout(isSplit, showAsk);
 
   addShell(slide, layout, pptx);
   addHeader(slide, pptx, layout, slideData.header);
 
-  // Left card
-  addCard(
-    slide,
-    pptx,
-    layout.content.xPx,
-    layout.cards.yPx,
-    layout.cards.leftWidthPx,
-    layout.cards.heightPx,
-    slideData.leftCard
-  );
+  if (singleCard) {
+    addCard(
+      slide,
+      pptx,
+      layout.content.xPx,
+      layout.cards.yPx,
+      layout.content.wPx,
+      layout.cards.heightPx,
+      slideData.leftCard
+    );
+  } else {
+    // Left card
+    addCard(
+      slide,
+      pptx,
+      layout.content.xPx,
+      layout.cards.yPx,
+      layout.cards.leftWidthPx,
+      layout.cards.heightPx,
+      slideData.leftCard
+    );
 
-  // Right card
-  addCard(
-    slide,
-    pptx,
-    layout.content.xPx + layout.cards.leftWidthPx + DESIGN.columnGapPx,
-    layout.cards.yPx,
-    layout.cards.rightWidthPx,
-    layout.cards.heightPx,
-    slideData.rightCard
-  );
+    // Right card
+    addCard(
+      slide,
+      pptx,
+      layout.content.xPx + layout.cards.leftWidthPx + DESIGN.columnGapPx,
+      layout.cards.yPx,
+      layout.cards.rightWidthPx,
+      layout.cards.heightPx,
+      slideData.rightCard
+    );
+  }
 
-  addAsk(slide, pptx, layout.ask, slideData.ask);
+  if (showAsk && layout.ask && slideData.ask) {
+    addAsk(slide, pptx, layout.ask, slideData.ask);
+  }
 };
 
 const createDeck = () => {
@@ -789,7 +866,13 @@ const createDeck = () => {
   pptx.author = "Central Bank AI Strategy";
 
   // Build slides
-  slidesData.forEach((slideData) => buildSlide(pptx, slideData, slideData.splitColumns || false));
+  slidesData.forEach((slideData) =>
+    buildSlide(pptx, slideData, {
+      splitColumns: slideData.splitColumns || false,
+      showAsk: slideData.showAsk !== false,
+      singleCard: slideData.singleCard || !slideData.rightCard,
+    })
+  );
 
   return pptx;
 };
