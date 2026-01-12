@@ -46,6 +46,85 @@ const sharedText = {
 const slidesData = [
   {
     header: {
+      eyebrow: "Session Agenda",
+      title: "Industrialising AI in a Central Bank",
+      subtitle: "How to move from pilots to trusted, reusable production capability.",
+      badge: "AI Adoption @ HKMA",
+    },
+    leftCard: {
+      title: "Agenda",
+      type: "iconGrid",
+      items: [
+        { icon: "◍", title: "Context & mandate", detail: "HKMA mandate—and why industrialising AI is harder than in the private sector." },
+        { icon: "✦", title: "From pilot to production", detail: "Use cases, scale enablers, and what “industrialised” looks like." },
+        { icon: "✓", title: "Lifecycle & governance", detail: "Repeatable controls to deploy safely and stay audit-ready." },
+        { icon: "⬡", title: "Architecture, adoption, lessons", detail: "Reference stack, democratised innovation, and practical takeaways." },
+      ],
+      sparkline: [
+        { value: "Clarity", label: "Priorities" },
+        { value: "Alignment", label: "Governance" },
+        { value: "Momentum", label: "Delivery" },
+      ],
+    },
+    rightCard: {
+      title: "What We Align On",
+      type: "pills",
+      pills: ["Trust", "Scale", "Reuse"],
+      items: [
+        { icon: "◆", title: "Where to standardise", detail: "Shared platforms and patterns vs bespoke builds." },
+        { icon: "◈", title: "Where to differentiate", detail: "Mission-critical use cases that merit deeper investment." },
+        { icon: "◎", title: "How to govern", detail: "Guardrails that enable teams while keeping risk visible and managed." },
+      ],
+    },
+    ask: {
+      icon: "✦",
+      title: "Session Goal",
+      text: "Agree a pragmatic path to scale AI responsibly across HKMA.",
+      cta: "Align",
+    },
+    splitColumns: false,
+  },
+  {
+    header: {
+      eyebrow: "HKMA Context",
+      title: "Mandate + Reality Check",
+      subtitle: "The same AI ambition—delivered under different constraints.",
+      badge: "Public Trust First",
+    },
+    leftCard: {
+      title: "HKMA Mandate",
+      type: "iconGrid",
+      items: [
+        { icon: "◎", title: "Monetary & financial stability", detail: "Maintain stability and resilience across the system." },
+        { icon: "◆", title: "Financial system supervision", detail: "Supervise parts of the financial system and market conduct." },
+        { icon: "⬡", title: "Manage the Exchange Fund", detail: "Execute operations with strong controls and accountability." },
+      ],
+      sparkline: [
+        { value: "Stability", label: "Mission" },
+        { value: "Control", label: "DNA" },
+        { value: "Accountable", label: "Outcomes" },
+      ],
+    },
+    rightCard: {
+      title: "Why It’s Harder Here",
+      type: "iconGrid",
+      items: [
+        { icon: "✓", title: "Risk-averse environment", detail: "Low tolerance for model errors and uncontrolled behaviour." },
+        { icon: "◍", title: "Sensitive data + secrecy laws", detail: "Strict confidentiality, access controls, and data minimisation." },
+        { icon: "⬡", title: "Legacy tech + complex governance", detail: "Integration constraints, multi-layer approvals, shared ownership." },
+        { icon: "✦", title: "Walk the talk (reputation)", detail: "Public-facing credibility requires consistent, explainable practices." },
+      ],
+    },
+    ask: {
+      icon: "◆",
+      title: "Implication",
+      text: "We need more “industrial plumbing” than pilots: platforms, patterns, and guardrails.",
+      cta: "Focus",
+    },
+    splitColumns: false,
+  },
+  {
+    header: {
       eyebrow: "Central Bank AI Strategy",
       title: "From Pilot to Production",
       subtitle: "Trusted, resilient AI for policy, supervision, and market operations.",
@@ -81,12 +160,13 @@ const slidesData = [
       text: "Institutionalise governance and invest in the data backbone to scale AI with confidence.",
       cta: "Mandate",
     },
+    splitColumns: false,
   },
   {
     header: {
       eyebrow: "Lifecycle & Governance",
-      title: "Lifecycle Discipline + Democratized Innovation",
-      subtitle: "A repeatable model for trusted deployment and enterprise adoption.",
+      title: "Lifecycle Discipline",
+      subtitle: "A repeatable model for trusted deployment, measurement, and audit readiness.",
       badge: "Policy-Compliant AI",
     },
     leftCard: {
@@ -105,25 +185,144 @@ const slidesData = [
       ],
     },
     rightCard: {
-      title: "Democratize Innovation",
-      type: "iconGrid",
+      title: "Controls for Production",
+      type: "pills",
+      pills: ["Guardrails", "Evidence", "Oversight"],
       items: [
-        { icon: "◎", title: "Federated squads", detail: "Domain teams co-create with the AI center of excellence." },
-        { icon: "◆", title: "Shared platforms", detail: "Reusable data products, model libraries, and APIs." },
-        { icon: "◈", title: "Capability uplift", detail: "Executive briefings, analyst academies, certified training." },
+        { icon: "✓", title: "Model validation", detail: "Testing, explainability, and approval checkpoints for material use cases." },
+        { icon: "◍", title: "Access + data controls", detail: "Least privilege, data minimisation, and confidential patterns where needed." },
+        { icon: "⬡", title: "Monitoring + audit trail", detail: "Prompt/output logging, drift detection, and incident playbooks." },
       ],
       sparkline: [
-        { value: "30%", label: "Faster delivery" },
-        { value: "Enterprise", label: "Adoption" },
-        { value: "Audit", label: "Confidence" },
+        { value: "Audit", label: "Ready" },
+        { value: "Human", label: "Oversight" },
+        { value: "Measured", label: "Risk" },
       ],
     },
     ask: {
       icon: "◆",
       title: "Strategic Close",
-      text: "Align governance, talent, and platforms to industrialise AI with public trust.",
-      cta: "Commit",
+      text: "Lifecycle discipline creates the safety and evidence base needed for scale.",
+      cta: "Scale",
     },
+    splitColumns: true,
+  },
+  {
+    header: {
+      eyebrow: "Platform Architecture",
+      title: "Reference Stack (Bottom → Top)",
+      subtitle: "Industrial plumbing: reusable layers + cross-cutting security.",
+      badge: "Reusable by Design",
+    },
+    leftCard: {
+      title: "Core Layers",
+      type: "iconGrid",
+      items: [
+        { icon: "⬡", title: "Hardware / compute", detail: "GPU pools, container runtime, scalable inference capacity." },
+        { icon: "◍", title: "Data platform", detail: "Catalog, lineage, curated datasets, governed access." },
+        { icon: "✦", title: "AI factory", detail: "MLOps, vector DB, evaluation, model serving, prompt/policy management." },
+        { icon: "◎", title: "AI applications", detail: "Copilots, analytics, automation—built on shared APIs and patterns." },
+      ],
+    },
+    rightCard: {
+      title: "Security (Cross-Cutting)",
+      type: "pills",
+      pills: ["Guardrails", "Monitoring", "Access"],
+      items: [
+        { icon: "✓", title: "Policy guardrails", detail: "Content filtering, tool permissions, safe prompting patterns." },
+        { icon: "◆", title: "Logging + monitoring", detail: "Telemetry, audit logs, drift/abuse detection, performance SLOs." },
+        { icon: "◍", title: "Identity + entitlement", detail: "RBAC/ABAC, secrets management, environment segregation." },
+      ],
+      sparkline: [
+        { value: "Privacy", label: "Protected" },
+        { value: "Compliance", label: "Evidenced" },
+        { value: "Resilience", label: "Operated" },
+      ],
+    },
+    ask: {
+      icon: "⬡",
+      title: "Design Principle",
+      text: "Standardise the stack, then let teams innovate on top with reusable blocks.",
+      cta: "Build",
+    },
+    splitColumns: false,
+  },
+  {
+    header: {
+      eyebrow: "Adoption at Scale",
+      title: "Democratised Innovation (with Guardrails)",
+      subtitle: "Enable domain teams to build—while keeping risk visible, owned, and managed.",
+      badge: "Federated Delivery",
+    },
+    leftCard: {
+      title: "Operating Model",
+      type: "iconGrid",
+      items: [
+        { icon: "◎", title: "Federated squads", detail: "Domain teams co-create with an AI enablement function (CoE / platform team)." },
+        { icon: "◆", title: "Shared ownership", detail: "Business owns outcomes; IT owns platforms; risk partners early and continuously." },
+        { icon: "✓", title: "Guardrails by default", detail: "Templates, approved tools, and controls embedded in the delivery pipeline." },
+      ],
+      sparkline: [
+        { value: "Reuse", label: "Patterns" },
+        { value: "Faster", label: "Delivery" },
+        { value: "Safer", label: "Scaling" },
+      ],
+    },
+    rightCard: {
+      title: "Enablers",
+      type: "pills",
+      pills: ["Platforms", "Patterns", "Skills"],
+      items: [
+        { icon: "⬡", title: "Shared platforms", detail: "Reusable data products, model libraries, and APIs." },
+        { icon: "◈", title: "Pattern library", detail: "Reference implementations: RAG, evaluation, approval flows." },
+        { icon: "✦", title: "Capability uplift", detail: "Executive briefings, analyst academies, role-based training." },
+      ],
+      sparkline: [
+        { value: "Enterprise", label: "Adoption" },
+        { value: "Less", label: "Duplication" },
+        { value: "More", label: "Coverage" },
+      ],
+    },
+    ask: {
+      icon: "◎",
+      title: "Adoption Message",
+      text: "Make the safe path the easiest path—then teams will scale innovation naturally.",
+      cta: "Enable",
+    },
+    splitColumns: false,
+  },
+  {
+    header: {
+      eyebrow: "What We Learned",
+      title: "Lessons Learned",
+      subtitle: "Pragmatic lessons across technology, organisation, and risk & governance.",
+      badge: "Practical Takeaways",
+    },
+    leftCard: {
+      title: "Technology",
+      type: "iconGrid",
+      items: [
+        { icon: "⬡", title: "Start small, opinionated", detail: "Pick a tight default stack; reduce onboarding and cognitive load." },
+        { icon: "◆", title: "Avoid platform sprawl", detail: "Fewer platforms, clear ownership, explicit deprecation paths." },
+        { icon: "◈", title: "Build reusability", detail: "Invest in platforms and patternising (templates, libraries, reference apps)." },
+      ],
+    },
+    rightCard: {
+      title: "Organisation + Governance",
+      type: "iconGrid",
+      items: [
+        { icon: "◎", title: "Business + IT together", detail: "Close collaboration from framing to operations; shared KPIs." },
+        { icon: "✦", title: "Incentivise reuse", detail: "Reward adoption of common components over bespoke builds." },
+        { icon: "✓", title: "Governance as a carrot", detail: "Balance innovation with risk; educate users on responsibilities and imperfections." },
+      ],
+    },
+    ask: {
+      icon: "★",
+      title: "Closing Note",
+      text: "Scaling AI is an organisational change program—technology is necessary but not sufficient.",
+      cta: "Next",
+    },
+    splitColumns: false,
   },
 ];
 
@@ -589,9 +788,8 @@ const createDeck = () => {
   pptx.title = "From Pilot to Production: Industrialising AI in a Central Bank";
   pptx.author = "Central Bank AI Strategy";
 
-  // Build both slides from HTML content
-  buildSlide(pptx, slidesData[0], false);
-  buildSlide(pptx, slidesData[1], true);
+  // Build slides
+  slidesData.forEach((slideData) => buildSlide(pptx, slideData, slideData.splitColumns || false));
 
   return pptx;
 };
