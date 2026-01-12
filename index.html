@@ -129,6 +129,10 @@
       grid-template-columns: 1fr 1fr;
     }
 
+    .content.single {
+      grid-template-columns: 1fr;
+    }
+
     .card {
       background: #fff;
       border-radius: var(--radius);
@@ -215,6 +219,10 @@
       gap: 14px;
     }
 
+    .journey.large {
+      gap: 24px;
+    }
+
     .journey-step {
       background: #f7f9fc;
       border-radius: 16px;
@@ -223,6 +231,25 @@
       display: grid;
       gap: 10px;
       text-align: center;
+      position: relative;
+    }
+
+    .journey.large .journey-step {
+      padding: 22px 18px;
+      gap: 12px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #f9fbff 0%, #f2f6fb 100%);
+    }
+
+    .journey.large .journey-step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      transform: translate(50%, -50%);
+      font-size: 28px;
+      font-weight: 700;
+      color: rgba(74, 92, 112, 0.65);
     }
 
     .journey-step .step-icon {
@@ -237,14 +264,32 @@
       font-weight: 700;
     }
 
+    .journey.large .journey-step .step-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      font-size: 16px;
+      box-shadow: 0 10px 18px rgba(225, 180, 76, 0.18);
+    }
+
     .journey-step h4 {
       font-size: 13px;
       color: var(--deep-navy);
     }
 
+    .journey.large .journey-step h4 {
+      font-size: 15px;
+      letter-spacing: 0.02em;
+    }
+
     .journey-step span {
       font-size: 12px;
       color: var(--muted);
+    }
+
+    .journey.large .journey-step span {
+      font-size: 12.5px;
+      line-height: 1.35;
     }
 
     .pill-row {
@@ -631,101 +676,46 @@
         </div>
       </header>
 
-      <section class="content split" aria-label="Lifecycle and controls">
-        <article class="card" aria-label="AI lifecycle">
-          <h2>End-to-End Lifecycle</h2>
-          <div class="journey" aria-label="Lifecycle steps">
+      <section class="content single" aria-label="Lifecycle flow">
+        <article class="card" aria-label="AI lifecycle full width">
+          <h2>End-to-End Lifecycle (Visual)</h2>
+          <div class="journey large" aria-label="Lifecycle steps large">
             <div class="journey-step">
               <div class="step-icon">01</div>
               <h4>Qualify</h4>
-              <span>Strategic fit</span>
+              <span>Strategic fit · data readiness · value & risk sizing</span>
             </div>
             <div class="journey-step">
               <div class="step-icon">02</div>
               <h4>Validate</h4>
-              <span>Model risk</span>
+              <span>Evaluation · model risk · explainability · approvals</span>
             </div>
             <div class="journey-step">
               <div class="step-icon">03</div>
               <h4>Deploy</h4>
-              <span>Secure release</span>
+              <span>Secure release · guardrails · access controls · rollout</span>
             </div>
             <div class="journey-step">
               <div class="step-icon">04</div>
               <h4>Monitor</h4>
-              <span>Audit ready</span>
+              <span>Logging · drift · incidents · continuous improvement</span>
             </div>
           </div>
           <div class="sparkline" aria-label="Lifecycle anchors">
             <div class="spark">
-              <div class="value">Governed</div>
-              <div class="label">By design</div>
+              <div class="value">Evidence</div>
+              <div class="label">Audit trail</div>
             </div>
             <div class="spark">
-              <div class="value">Secure</div>
-              <div class="label">Every release</div>
+              <div class="value">Controls</div>
+              <div class="label">Guardrails</div>
             </div>
             <div class="spark">
-              <div class="value">Measured</div>
-              <div class="label">Outcomes</div>
+              <div class="value">Value</div>
+              <div class="label">Measured</div>
             </div>
           </div>
         </article>
-
-        <article class="card" aria-label="Controls for production">
-          <h2>Controls for Production</h2>
-          <div class="pill-row" aria-label="Control themes">
-            <div class="pill">Guardrails</div>
-            <div class="pill">Evidence</div>
-            <div class="pill">Oversight</div>
-          </div>
-          <div class="icon-grid" aria-label="Control capabilities">
-            <div class="icon-item">
-              <div class="icon-circle" aria-hidden="true">✓</div>
-              <div>
-                <h3>Model validation</h3>
-                <p>Testing, explainability, and approval checkpoints for material use cases.</p>
-              </div>
-            </div>
-            <div class="icon-item">
-              <div class="icon-circle" aria-hidden="true">◍</div>
-              <div>
-                <h3>Access + data controls</h3>
-                <p>Least privilege, data minimisation, and confidential-compute patterns where needed.</p>
-              </div>
-            </div>
-            <div class="icon-item">
-              <div class="icon-circle" aria-hidden="true">⬡</div>
-              <div>
-                <h3>Monitoring + audit trail</h3>
-                <p>Prompt/output logging, drift detection, and incident playbooks.</p>
-              </div>
-            </div>
-          </div>
-          <div class="sparkline" aria-label="Control outcomes">
-            <div class="spark">
-              <div class="value">Audit</div>
-              <div class="label">Ready</div>
-            </div>
-            <div class="spark">
-              <div class="value">Human</div>
-              <div class="label">Oversight</div>
-            </div>
-            <div class="spark">
-              <div class="value">Measured</div>
-              <div class="label">Risk</div>
-            </div>
-          </div>
-        </article>
-      </section>
-
-      <section class="ask" aria-label="Strategic close">
-        <div class="icon" aria-hidden="true">◆</div>
-        <div class="text">
-          <h3>Strategic Close</h3>
-          <p>Lifecycle discipline creates the safety and evidence base needed for scale.</p>
-        </div>
-        <div class="cta" aria-label="Commitment">Scale</div>
       </section>
     </section>
 
